@@ -324,3 +324,4 @@ For technical support or questions:
 **Framework:** React 18 + TypeScript + Vite + Supabase  
 **Theme:** Blue & White Professional Medical Aesthetic
 # MyPeptideJourney
+# kaedra
