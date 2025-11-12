@@ -7,23 +7,25 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Professional Light Blue and Dark Blue Theme
+        // Aesthetic Cute Blue and White Theme
         primary: {
-          50: '#eff6ff',   // Lightest blue
-          100: '#dbeafe',  // Very light blue
-          200: '#bfdbfe',  // Light blue
-          300: '#93c5fd',  // Medium light blue
-          400: '#60a5fa',  // Light blue (accent)
-          500: '#3b82f6',  // Standard blue
-          600: '#2563eb',  // Dark blue (primary)
-          700: '#1d4ed8',  // Darker blue
-          800: '#1e40af',  // Very dark blue
-          900: '#1e3a8a',  // Darkest blue
+          50: '#f0f9ff',   // Sky blue 50 - Lightest
+          100: '#e0f2fe',  // Sky blue 100 - Very soft
+          200: '#bae6fd',  // Sky blue 200 - Soft blue
+          300: '#7dd3fc',  // Sky blue 300 - Light playful blue
+          400: '#38bdf8',  // Sky blue 400 - Bright accent
+          500: '#0ea5e9',  // Sky blue 500 - Main blue
+          600: '#0284c7',  // Sky blue 600 - Primary blue
+          700: '#0369a1',  // Sky blue 700 - Rich blue
+          800: '#075985',  // Sky blue 800 - Deep blue
+          900: '#0c4a6e',  // Sky blue 900 - Darkest
         },
         accent: {
-          light: '#60a5fa',   // Light blue accent
-          DEFAULT: '#3b82f6', // Standard blue
-          dark: '#2563eb',    // Dark blue accent
+          light: '#38bdf8',   // Bright playful blue
+          DEFAULT: '#0ea5e9', // Cheerful blue
+          dark: '#0284c7',    // Rich blue
+          pink: '#f9a8d4',    // Soft pink accent
+          purple: '#c4b5fd',  // Soft purple accent
         },
         gray: {
           50: '#f9fafb',
@@ -42,9 +44,11 @@ export default {
         inter: ['Inter', 'sans-serif'],
       },
       boxShadow: {
-        'soft': '0 2px 8px rgba(37, 99, 235, 0.08)',
-        'medium': '0 4px 16px rgba(37, 99, 235, 0.12)',
-        'large': '0 8px 24px rgba(37, 99, 235, 0.16)',
+        'soft': '0 2px 15px rgba(14, 165, 233, 0.1)',
+        'medium': '0 4px 20px rgba(14, 165, 233, 0.15)',
+        'large': '0 8px 30px rgba(14, 165, 233, 0.2)',
+        'glow': '0 0 20px rgba(56, 189, 248, 0.3)',
+        'cute': '0 4px 15px rgba(186, 230, 253, 0.4)',
       },
       animation: {
         'fadeIn': 'fadeIn 0.4s ease-out',
