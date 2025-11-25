@@ -23,6 +23,7 @@ const COAManager: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [coaPageEnabled, setCoaPageEnabled] = useState<boolean>(true);
   const [formData, setFormData] = useState<Partial<COAReport>>({
     product_name: '',
     batch: 'Unknown',
@@ -39,7 +40,46 @@ const COAManager: React.FC = () => {
 
   useEffect(() => {
     fetchCOAReports();
+    fetchCOAPageSetting();
   }, []);
+
+  const fetchCOAPageSetting = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('value')
+        .eq('id', 'coa_page_enabled')
+        .single();
+
+      if (error && error.code !== 'PGRST116') throw error;
+      setCoaPageEnabled(data?.value === 'true' || data?.value === true || !data);
+    } catch (error) {
+      console.error('Error fetching COA page setting:', error);
+      // Default to enabled if setting doesn't exist
+      setCoaPageEnabled(true);
+    }
+  };
+
+  const toggleCOAPage = async (enabled: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('site_settings')
+        .upsert({
+          id: 'coa_page_enabled',
+          value: enabled ? 'true' : 'false',
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'id'
+        });
+
+      if (error) throw error;
+      setCoaPageEnabled(enabled);
+      alert(enabled ? '✅ COA page is now visible on the website' : '❌ COA page is now hidden from the website');
+    } catch (error) {
+      console.error('Error updating COA page setting:', error);
+      alert('❌ Failed to update COA page setting');
+    }
+  };
 
   const fetchCOAReports = async () => {
     try {
@@ -154,23 +194,41 @@ const COAManager: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            <Shield className="w-7 h-7 text-sky-500" />
+            <Shield className="w-7 h-7 text-gold-600" />
             COA Lab Reports
           </h2>
           <p className="text-sm text-gray-600 mt-1">
             Manage certificates of analysis and lab test reports
           </p>
         </div>
-        <button
-          onClick={handleAdd}
-          className="flex items-center gap-2 bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 text-white px-4 py-2 rounded-xl font-medium transition-all shadow-lg"
-        >
-          <Plus className="w-5 h-5" />
-          Add COA Report
-        </button>
+        <div className="flex items-center gap-3">
+          {/* COA Page Toggle */}
+          <div className="flex items-center gap-2 bg-white border border-gold-300/30 rounded-lg px-3 py-2 shadow-sm">
+            <span className="text-xs font-medium text-gray-700">Show COA Page:</span>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={coaPageEnabled}
+                onChange={(e) => toggleCOAPage(e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-gold-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold-600"></div>
+            </label>
+            <span className={`text-xs font-semibold ${coaPageEnabled ? 'text-gold-600' : 'text-gray-400'}`}>
+              {coaPageEnabled ? 'ON' : 'OFF'}
+            </span>
+          </div>
+          <button
+            onClick={handleAdd}
+            className="flex items-center gap-2 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-black px-4 py-2 rounded-lg font-medium transition-all shadow-md"
+          >
+            <Plus className="w-5 h-5" />
+            Add COA Report
+          </button>
+        </div>
       </div>
 
       {/* Add/Edit Form */}

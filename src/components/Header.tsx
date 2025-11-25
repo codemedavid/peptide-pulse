@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useCOAPageSetting } from '../hooks/useCOAPageSetting';
 import { ShoppingCart, Menu, X, MessageCircle, Sparkles, Instagram, Phone } from 'lucide-react';
 
 interface HeaderProps {
@@ -9,6 +10,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClick }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { coaPageEnabled } = useCOAPageSetting();
 
   // Contact Links
   const messengerMessage = encodeURIComponent('Hi! I am interested in your products.');
@@ -62,12 +64,14 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                 >
                   Products
                 </button>
-                <a
-                  href="/coa"
-                  className="px-3 py-2 lg:px-4 lg:py-2 text-sm lg:text-base text-gray-700 hover:text-black hover:bg-gray-50 rounded-lg transition-all font-medium"
-                >
-                  Lab Reports
-                </a>
+                {coaPageEnabled && (
+                  <a
+                    href="/coa"
+                    className="px-3 py-2 lg:px-4 lg:py-2 text-sm lg:text-base text-gray-700 hover:text-black hover:bg-gray-50 rounded-lg transition-all font-medium"
+                  >
+                    Lab Reports
+                  </a>
+                )}
                 <a
                   href={messengerUrl}
                   target="_blank"
@@ -128,13 +132,15 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                 >
                   🧪 Products
                 </button>
-                <a
-                  href="/coa"
-                  className="text-left px-4 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors font-medium text-sm border border-transparent hover:border-gold-300"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  📋 Lab Reports
-                </a>
+                {coaPageEnabled && (
+                  <a
+                    href="/coa"
+                    className="text-left px-4 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors font-medium text-sm border border-transparent hover:border-gold-300"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    📋 Lab Reports
+                  </a>
+                )}
                 <div className="flex flex-col gap-2 pt-2 border-t border-gray-200">
                   <a
                     href={instagramUrl}

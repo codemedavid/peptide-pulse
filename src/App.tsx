@@ -12,6 +12,7 @@ import Footer from './components/Footer';
 import AdminDashboard from './components/AdminDashboard';
 import COA from './components/COA';
 import { useMenu } from './hooks/useMenu';
+import { useCOAPageSetting } from './hooks/useCOAPageSetting';
 
 function MainApp() {
   const cart = useCart();
@@ -94,11 +95,13 @@ function MainApp() {
 }
 
 function App() {
+  const { coaPageEnabled } = useCOAPageSetting();
+
   return (
     <Router>
       <Routes>
         <Route path="/" element={<MainApp />} />
-        <Route path="/coa" element={<COA />} />
+        {coaPageEnabled && <Route path="/coa" element={<COA />} />}
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>

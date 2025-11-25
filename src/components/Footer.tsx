@@ -1,8 +1,10 @@
 import React from 'react';
 import { MessageCircle, Shield, Heart, Sparkles, Instagram, Phone } from 'lucide-react';
+import { useCOAPageSetting } from '../hooks/useCOAPageSetting';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
+  const { coaPageEnabled } = useCOAPageSetting();
   
   // Contact Links
   const messengerMessage = encodeURIComponent('Hi! I would like to inquire about your products.');
@@ -34,14 +36,16 @@ const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div className="flex flex-wrap items-center gap-2 md:gap-3 justify-center md:justify-start">
-            <a
-              href="/coa"
-              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-3 py-2 md:px-4 md:py-2 rounded-lg transition-all font-medium text-xs md:text-sm border border-gold-500/30"
-            >
-              <Shield className="w-3 h-3 md:w-4 md:h-4" />
-              <span className="hidden sm:inline">Lab Reports</span>
-              <span className="sm:hidden">Reports</span>
-            </a>
+            {coaPageEnabled && (
+              <a
+                href="/coa"
+                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-3 py-2 md:px-4 md:py-2 rounded-lg transition-all font-medium text-xs md:text-sm border border-gold-500/30"
+              >
+                <Shield className="w-3 h-3 md:w-4 md:h-4" />
+                <span className="hidden sm:inline">Lab Reports</span>
+                <span className="sm:hidden">Reports</span>
+              </a>
+            )}
             <a
               href={instagramUrl}
               target="_blank"

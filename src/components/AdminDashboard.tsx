@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Save, X, ArrowLeft, Beaker, TrendingUp, Package, Users, Lock, FolderOpen, CreditCard, Settings, Sparkles, Heart, Layers, Shield, RefreshCw, Warehouse, ShoppingCart } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, ArrowLeft, Beaker, TrendingUp, Package, Users, Lock, FolderOpen, CreditCard, Sparkles, Heart, Layers, Shield, RefreshCw, Warehouse, ShoppingCart } from 'lucide-react';
 import type { Product } from '../types';
 import { useMenu } from '../hooks/useMenu';
 import { useCategories } from '../hooks/useCategories';
 import ImageUpload from './ImageUpload';
 import CategoryManager from './CategoryManager';
 import PaymentMethodManager from './PaymentMethodManager';
-import SiteSettingsManager from './SiteSettingsManager';
 import VariationManager from './VariationManager';
 import COAManager from './COAManager';
 import PeptideInventoryManager from './PeptideInventoryManager';
@@ -20,7 +19,7 @@ const AdminDashboard: React.FC = () => {
   const [loginError, setLoginError] = useState('');
   const { products, loading, addProduct, updateProduct, deleteProduct, refreshProducts } = useMenu();
   const { categories } = useCategories();
-  const [currentView, setCurrentView] = useState<'dashboard' | 'products' | 'add' | 'edit' | 'categories' | 'payments' | 'settings' | 'coa' | 'inventory' | 'orders'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'products' | 'add' | 'edit' | 'categories' | 'payments' | 'coa' | 'inventory' | 'orders'>('dashboard');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [managingVariationsProductId, setManagingVariationsProductId] = useState<string | null>(null);
@@ -1029,34 +1028,6 @@ const AdminDashboard: React.FC = () => {
     return <PaymentMethodManager onBack={() => setCurrentView('dashboard')} />;
   }
 
-  // Site Settings View
-  if (currentView === 'settings') {
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-white">
-        <div className="bg-white shadow-md border-b border-gold-300/30">
-          <div className="max-w-6xl mx-auto px-3 sm:px-4">
-            <div className="flex items-center justify-between h-12 md:h-14">
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => setCurrentView('dashboard')}
-                  className="text-gray-700 hover:text-gold-600 transition-colors flex items-center gap-1 group"
-                >
-                  <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-                  <span className="text-xs md:text-sm">Dashboard</span>
-                </button>
-                <h1 className="text-sm md:text-base font-bold bg-gradient-to-r from-black to-gray-900 bg-clip-text text-transparent">⚙️ Site Settings</h1>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="max-w-5xl mx-auto px-3 sm:px-4 py-3 md:py-4">
-          <SiteSettingsManager />
-        </div>
-      </div>
-    );
-  }
-
   // COA Lab Reports View
   if (currentView === 'coa') {
     return (
@@ -1275,15 +1246,6 @@ const AdminDashboard: React.FC = () => {
                   <ShoppingCart className="h-3 w-3 md:h-4 md:w-4" />
                 </div>
                 <span className="text-xs font-medium text-gray-900">Orders Management</span>
-              </button>
-              <button
-                onClick={() => setCurrentView('settings')}
-                className="w-full flex items-center gap-2 p-1.5 md:p-2 text-left hover:bg-gradient-to-r hover:from-gold-50 hover:to-gray-50 rounded-md md:rounded-lg transition-all group"
-              >
-                <div className="p-1 md:p-1.5 bg-gradient-to-br from-gray-800 to-black rounded-md text-gold-500">
-                  <Settings className="h-3 w-3 md:h-4 md:w-4" />
-                </div>
-                <span className="text-xs font-medium text-gray-900">Site Settings</span>
               </button>
             </div>
           </div>
