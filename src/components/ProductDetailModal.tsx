@@ -134,10 +134,10 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
                   <div className="flex justify-between">
                     <span className="text-gray-600 text-[11px] sm:text-xs md:text-sm">Stock:</span>
                     <span className={`font-medium text-[11px] sm:text-xs md:text-sm ${(product.variations && product.variations.length > 0
-                        ? product.variations.some(v => v.stock_quantity > 0)
-                        : product.stock_quantity > 0)
-                        ? 'text-gold-600'
-                        : 'text-red-600'
+                      ? product.variations.some(v => v.stock_quantity > 0)
+                      : product.stock_quantity > 0)
+                      ? 'text-gold-600'
+                      : 'text-red-600'
                       }`}>
                       {product.variations && product.variations.length > 0
                         ? product.variations.reduce((sum, v) => sum + v.stock_quantity, 0)
@@ -168,11 +168,11 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
                   )}
                 </div>
 
-                {/* Size Selection */}
+                {/* Variation Selection */}
                 {product.variations && product.variations.length > 0 && (
                   <div className="mb-3 sm:mb-4">
                     <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">
-                      Select Size:
+                      Select Variation:
                     </label>
                     <select
                       value={selectedVariation?.id || ''}
@@ -201,7 +201,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
                     </select>
                     {selectedVariation && selectedVariation.stock_quantity === 0 && (
                       <p className="text-xs text-red-600 mt-1.5 font-semibold">
-                        ⚠️ This size is currently out of stock. Please select another size.
+                        ⚠️ This variation is currently out of stock. Please select another.
                       </p>
                     )}
                   </div>
