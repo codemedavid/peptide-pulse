@@ -64,10 +64,11 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
 
       {/* Product Image */}
       <div className="relative h-48 bg-gray-50 overflow-hidden rounded-t-lg">
-        {product.image_url ? (
+        {/* Show variation image if selected and available, otherwise show product image */}
+        {(selectedVariation?.image_url || product.image_url) ? (
           <img
-            src={product.image_url}
-            alt={product.name}
+            src={selectedVariation?.image_url || product.image_url || ''}
+            alt={selectedVariation ? `${product.name} - ${selectedVariation.name}` : product.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (

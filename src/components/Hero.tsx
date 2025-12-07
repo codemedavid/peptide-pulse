@@ -18,35 +18,35 @@ const Hero: React.FC = () => {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-theme-secondary"></span>
             </span>
             <span className="text-xs md:text-sm font-medium text-gray-600 tracking-wide">
-              Premium Peptide Solutions
+              Quality-tested products. Reliable performance. Trusted by our community.
             </span>
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-theme-text mb-6 md:mb-8 tracking-tight leading-tight">
-            Radiance, <span className="text-theme-accent">Confidence</span> <br className="hidden md:block" />
-            & Vitality.
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-theme-text mb-6 md:mb-8 tracking-tight leading-tight">
+            Premium Peptides & Essentials —<br className="hidden md:block" />
+            <span className="text-theme-accent">Trusted Quality</span> for Your Journey.
           </h1>
 
           {/* Subheading */}
-          <p className="text-lg md:text-xl text-gray-500 mb-8 md:mb-12 max-w-2xl mx-auto leading-relaxed">
-            Discover a curated selection of premium peptides designed to help you look and feel your absolute best. Lab-verified purity tailored for your journey.
+          <p className="text-base md:text-lg text-gray-500 mb-8 md:mb-12 max-w-2xl mx-auto leading-relaxed">
+            Explore our carefully curated selection of high-quality peptides, peptide pens, cartridges, pen needles, and insulin syringes. Each product is personally tested and trusted for purity, safety, and performance — so you can pin with confidence.
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 md:mb-16">
             <button className="btn-primary w-full sm:w-auto group flex items-center justify-center gap-2">
-              Shop Collection
+              Shop All Products
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
             <button className="px-8 py-3 rounded-lg font-medium text-theme-text hover:text-theme-accent transition-colors flex items-center gap-2 w-full sm:w-auto justify-center">
-              View Lab Reports
+              View Lab Tests & Quality Assurance
               <ShieldCheck className="w-4 h-4" />
             </button>
           </div>
 
           {/* Trust Indicators */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-12 border-t border-gray-100 pt-8 md:pt-12 max-w-3xl mx-auto">
+          <div className="grid grid-cols-3 gap-3 md:gap-8 border-t border-gray-100 pt-6 md:pt-12 max-w-3xl mx-auto">
             <div className="flex flex-col items-center gap-2 group">
               <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 group-hover:border-theme-accent/30 transition-colors">
                 <ShieldCheck className="w-6 h-6 text-theme-accent" />
@@ -65,8 +65,8 @@ const Hero: React.FC = () => {
               <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 group-hover:border-theme-accent/30 transition-colors">
                 <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-theme-accent to-theme-secondary opacity-75" />
               </div>
-              <p className="font-semibold text-theme-text">Fast Shipping</p>
-              <p className="text-sm text-gray-400">Nationwide Delivery</p>
+              <p className="font-semibold text-theme-text">Real-World Tested</p>
+              <p className="text-sm text-gray-400 text-center">Verified by our team & community</p>
             </div>
           </div>
 

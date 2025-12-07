@@ -25,7 +25,7 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [zipCode, setZipCode] = useState('');
-  const [shippingLocation, setShippingLocation] = useState<'NCR' | 'LUZON' | 'VISAYAS_MINDANAO' | ''>('');
+  const [shippingLocation, setShippingLocation] = useState<'NCR' | 'LUZON' | 'VISAYAS_MINDANAO' | 'LALAMOVE' | ''>('');
 
   // Payment
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
@@ -55,9 +55,11 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
       case 'NCR':
         return 160;
       case 'LUZON':
-        return 165;
+        return 100;
       case 'VISAYAS_MINDANAO':
-        return 190;
+        return 130;
+      case 'LALAMOVE':
+        return 0; // Fee to be discussed
       default:
         return 0;
     }
@@ -569,7 +571,7 @@ Please confirm this order. Thank you!
                       }`}
                   >
                     <p className="font-semibold text-gray-900 text-sm">LUZON</p>
-                    <p className="text-xs text-gray-500">₱165</p>
+                    <p className="text-sm text-gray-500">₱100</p>
                   </button>
                   <button
                     onClick={() => setShippingLocation('VISAYAS_MINDANAO')}
@@ -579,7 +581,17 @@ Please confirm this order. Thank you!
                       }`}
                   >
                     <p className="font-semibold text-gray-900 text-sm">VISAYAS & MINDANAO</p>
-                    <p className="text-xs text-gray-500">₱190</p>
+                    <p className="text-sm text-gray-500">₱130</p>
+                  </button>
+                  <button
+                    onClick={() => setShippingLocation('LALAMOVE')}
+                    className={`p-3 rounded-lg border-2 transition-all ${shippingLocation === 'LALAMOVE'
+                      ? 'border-gold-500 bg-gold-50'
+                      : 'border-gray-200 hover:border-gold-300'
+                      }`}
+                  >
+                    <p className="font-semibold text-gray-900 text-sm">LALAMOVE</p>
+                    <p className="text-xs text-gray-500">Fee TBD</p>
                   </button>
                 </div>
               </div>
@@ -715,7 +727,7 @@ Please confirm this order. Thank you!
                 >
                   <div className="text-left">
                     <p className="font-semibold text-gray-900">LUZON</p>
-                    <p className="text-sm text-gray-500">₱165</p>
+                    <p className="text-sm text-gray-500">₱100</p>
                   </div>
                   {shippingLocation === 'LUZON' && (
                     <div className="w-6 h-6 bg-gold-500 rounded-full flex items-center justify-center">
@@ -732,9 +744,26 @@ Please confirm this order. Thank you!
                 >
                   <div className="text-left">
                     <p className="font-semibold text-gray-900">VISAYAS & MINDANAO</p>
-                    <p className="text-sm text-gray-500">₱190</p>
+                    <p className="text-sm text-gray-500">₱130</p>
                   </div>
                   {shippingLocation === 'VISAYAS_MINDANAO' && (
+                    <div className="w-6 h-6 bg-gold-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs">✓</span>
+                    </div>
+                  )}
+                </button>
+                <button
+                  onClick={() => setShippingLocation('LALAMOVE')}
+                  className={`p-4 rounded-lg border-2 transition-all flex items-center justify-between ${shippingLocation === 'LALAMOVE'
+                    ? 'border-gold-500 bg-gold-50'
+                    : 'border-gray-200 hover:border-gold-300'
+                    }`}
+                >
+                  <div className="text-left">
+                    <p className="font-semibold text-gray-900">LALAMOVE</p>
+                    <p className="text-sm text-gray-500">Fee TBD</p>
+                  </div>
+                  {shippingLocation === 'LALAMOVE' && (
                     <div className="w-6 h-6 bg-gold-500 rounded-full flex items-center justify-center">
                       <span className="text-white text-xs">✓</span>
                     </div>

@@ -9,7 +9,7 @@ export interface Product {
   discount_start_date: string | null;
   discount_end_date: string | null;
   discount_active: boolean;
-  
+
   // Peptide-specific fields
   purity_percentage: number;
   molecular_weight: string | null;
@@ -17,19 +17,19 @@ export interface Product {
   sequence: string | null;
   storage_conditions: string;
   inclusions: string[] | null;
-  
+
   // Stock and availability
   stock_quantity: number;
   available: boolean;
   featured: boolean;
-  
+
   // Images and metadata
   image_url: string | null;
   safety_sheet_url: string | null;
-  
+
   created_at: string;
   updated_at: string;
-  
+
   // Relations
   variations?: ProductVariation[];
 }
@@ -41,6 +41,7 @@ export interface ProductVariation {
   quantity_mg: number;
   price: number;
   stock_quantity: number;
+  image_url?: string;
   created_at: string;
 }
 

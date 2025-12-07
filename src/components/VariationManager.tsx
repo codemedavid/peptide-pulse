@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Save, X, Package } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, Package, Image } from 'lucide-react';
 import type { Product, ProductVariation } from '../types';
 import { useMenu } from '../hooks/useMenu';
 
@@ -13,19 +13,21 @@ const VariationManager: React.FC<VariationManagerProps> = ({ product, onClose })
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  
+
   const [newVariation, setNewVariation] = useState({
     name: '',
     quantity_mg: 5.0,
     price: product.base_price,
-    stock_quantity: 0
+    stock_quantity: 0,
+    image_url: ''
   });
 
   const [editingVariation, setEditingVariation] = useState({
     name: '',
     quantity_mg: 5.0,
     price: product.base_price,
-    stock_quantity: 0
+    stock_quantity: 0,
+    image_url: ''
   });
 
   const handleAddVariation = async () => {
@@ -41,7 +43,8 @@ const VariationManager: React.FC<VariationManagerProps> = ({ product, onClose })
         name: newVariation.name,
         quantity_mg: newVariation.quantity_mg,
         price: newVariation.price,
-        stock_quantity: newVariation.stock_quantity
+        stock_quantity: newVariation.stock_quantity,
+        image_url: newVariation.image_url || undefined
       });
 
       if (result.success) {
@@ -49,7 +52,8 @@ const VariationManager: React.FC<VariationManagerProps> = ({ product, onClose })
           name: '',
           quantity_mg: 5.0,
           price: product.base_price,
-          stock_quantity: 0
+          stock_quantity: 0,
+          image_url: ''
         });
         setIsAdding(false);
         alert('Variation added successfully!');
@@ -69,7 +73,8 @@ const VariationManager: React.FC<VariationManagerProps> = ({ product, onClose })
       name: variation.name,
       quantity_mg: variation.quantity_mg,
       price: variation.price,
-      stock_quantity: variation.stock_quantity
+      stock_quantity: variation.stock_quantity,
+      image_url: variation.image_url || ''
     });
     setIsAdding(false);
   };
@@ -82,7 +87,10 @@ const VariationManager: React.FC<VariationManagerProps> = ({ product, onClose })
 
     try {
       setIsProcessing(true);
-      const result = await updateVariation(editingId, editingVariation);
+      const result = await updateVariation(editingId, {
+        ...editingVariation,
+        image_url: editingVariation.image_url || undefined
+      });
       if (result.success) {
         setEditingId(null);
         alert('Variation updated successfully!');
@@ -164,7 +172,7 @@ const VariationManager: React.FC<VariationManagerProps> = ({ product, onClose })
                       // Edit Mode
                       <div className="bg-white border-2 border-blue-300 rounded-xl p-4 space-y-4">
                         <h4 className="font-bold text-gray-900 mb-4">Edit Variation</h4>
-                        
+
                         <div className="grid grid-cols-2 gap-4">
                           <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -217,6 +225,30 @@ const VariationManager: React.FC<VariationManagerProps> = ({ product, onClose })
                           </div>
                         </div>
 
+                        {/* Image Upload */}
+                        <div className="mt-4">
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <Image className="w-4 h-4 inline mr-1" />
+                            Variation Image (Optional)
+                          </label>
+                          <div className="flex items-start gap-4">
+                            {editingVariation.image_url && (
+                              <img
+                                src={editingVariation.image_url}
+                                alt="Variation"
+                                className="w-20 h-20 object-cover rounded-lg border border-gray-200"
+                              />
+                            )}
+                            <input
+                              type="url"
+                              value={editingVariation.image_url}
+                              onChange={(e) => setEditingVariation({ ...editingVariation, image_url: e.target.value })}
+                              placeholder="https://example.com/image.jpg"
+                              className="input-field flex-1"
+                            />
+                          </div>
+                        </div>
+
                         <div className="flex gap-3 pt-4">
                           <button
                             onClick={handleUpdateVariation}
@@ -238,22 +270,36 @@ const VariationManager: React.FC<VariationManagerProps> = ({ product, onClose })
                     ) : (
                       // View Mode
                       <div className="bg-gradient-to-r from-teal-50 to-emerald-50 border-2 border-teal-200 rounded-xl p-4 flex items-center justify-between">
-                        <div className="flex-1 grid grid-cols-4 gap-4">
-                          <div>
-                            <div className="text-xs text-gray-500 mb-1">Size Name</div>
-                            <div className="font-bold text-gray-900">{variation.name}</div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-gray-500 mb-1">Quantity</div>
-                            <div className="font-semibold text-gray-700">{variation.quantity_mg}mg</div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-gray-500 mb-1">Price</div>
-                            <div className="font-semibold text-teal-600">₱{variation.price.toLocaleString()}</div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-gray-500 mb-1">Stock</div>
-                            <div className="font-semibold text-gray-700">{variation.stock_quantity} units</div>
+                        <div className="flex items-center gap-4">
+                          {/* Thumbnail */}
+                          {variation.image_url ? (
+                            <img
+                              src={variation.image_url}
+                              alt={variation.name}
+                              className="w-12 h-12 object-cover rounded-lg border border-gray-200 flex-shrink-0"
+                            />
+                          ) : (
+                            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <Package className="w-5 h-5 text-gray-400" />
+                            </div>
+                          )}
+                          <div className="flex-1 grid grid-cols-4 gap-4">
+                            <div>
+                              <div className="text-xs text-gray-500 mb-1">Size Name</div>
+                              <div className="font-bold text-gray-900">{variation.name}</div>
+                            </div>
+                            <div>
+                              <div className="text-xs text-gray-500 mb-1">Quantity</div>
+                              <div className="font-semibold text-gray-700">{variation.quantity_mg}mg</div>
+                            </div>
+                            <div>
+                              <div className="text-xs text-gray-500 mb-1">Price</div>
+                              <div className="font-semibold text-teal-600">₱{variation.price.toLocaleString()}</div>
+                            </div>
+                            <div>
+                              <div className="text-xs text-gray-500 mb-1">Stock</div>
+                              <div className="font-semibold text-gray-700">{variation.stock_quantity} units</div>
+                            </div>
                           </div>
                         </div>
                         <div className="flex gap-2 ml-4">
@@ -298,7 +344,7 @@ const VariationManager: React.FC<VariationManagerProps> = ({ product, onClose })
             {isAdding && (
               <div className="bg-white border-2 border-teal-300 rounded-xl p-6 space-y-4">
                 <h4 className="font-bold text-gray-900 mb-4">New Size Variation</h4>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -348,6 +394,30 @@ const VariationManager: React.FC<VariationManagerProps> = ({ product, onClose })
                       value={newVariation.stock_quantity}
                       onChange={(e) => setNewVariation({ ...newVariation, stock_quantity: parseInt(e.target.value) || 0 })}
                       className="input-field"
+                    />
+                  </div>
+                </div>
+
+                {/* Image URL */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <Image className="w-4 h-4 inline mr-1" />
+                    Variation Image URL (Optional)
+                  </label>
+                  <div className="flex items-start gap-4">
+                    {newVariation.image_url && (
+                      <img
+                        src={newVariation.image_url}
+                        alt="Preview"
+                        className="w-16 h-16 object-cover rounded-lg border border-gray-200"
+                      />
+                    )}
+                    <input
+                      type="url"
+                      value={newVariation.image_url}
+                      onChange={(e) => setNewVariation({ ...newVariation, image_url: e.target.value })}
+                      placeholder="https://example.com/image.jpg"
+                      className="input-field flex-1"
                     />
                   </div>
                 </div>
