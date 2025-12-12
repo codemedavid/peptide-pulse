@@ -72,9 +72,9 @@ const FAQ: React.FC = () => {
                 <div className="flex flex-wrap gap-2 mb-8">
                     <button
                         onClick={() => setActiveCategory(null)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${activeCategory === null
-                            ? 'bg-navy-900 text-white border-navy-900 shadow-md'
-                            : 'bg-white text-gray-600 border-navy-900 hover:bg-navy-50 hover:text-navy-900'
+                        className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all border shadow-sm ${activeCategory === null
+                            ? 'bg-navy-900 text-white border-navy-900 shadow-md transform scale-105'
+                            : 'bg-white text-navy-900 border-navy-900 hover:bg-navy-50'
                             }`}
                     >
                         All
@@ -83,8 +83,8 @@ const FAQ: React.FC = () => {
                         <button
                             key={category}
                             onClick={() => setActiveCategory(category)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 border ${activeCategory === category
-                                ? 'bg-navy-900 text-white border-navy-900 shadow-md'
+                            className={`px-4 py-2.5 rounded-full text-xs md:text-sm font-bold transition-all flex items-center gap-2 border shadow-sm ${activeCategory === category
+                                ? 'bg-navy-900 text-white border-navy-900 shadow-md transform scale-105'
                                 : 'bg-white text-gray-600 border-navy-900 hover:bg-navy-50 hover:text-navy-900'
                                 }`}
                         >
@@ -98,36 +98,40 @@ const FAQ: React.FC = () => {
 
                 {/* FAQ Items by Category */}
                 {(activeCategory ? [activeCategory] : categories).map(category => (
-                    <div key={category} className="mb-8">
-                        <div className={`flex items-center gap-2 mb-4 px-3 py-2 rounded-lg border border-gold-400 bg-white shadow-sm`}>
+                    <div key={category} className="mb-10">
+                        {/* Section Header */}
+                        <div className="flex items-center gap-3 mb-6 px-4 py-3 rounded-lg border border-gold-400 bg-white shadow-sm w-full">
                             <span className="text-gold-500">
                                 {categoryIcons[category] || <HelpCircle className="w-5 h-5" />}
                             </span>
-                            <h2 className="font-bold text-sm uppercase tracking-wide text-navy-900">{category}</h2>
+                            <h2 className="font-bold text-sm md:text-base uppercase tracking-wide text-navy-900">{category}</h2>
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                             {filteredFAQs
                                 .filter(faq => faq.category === category)
                                 .map(faq => (
                                     <div
                                         key={faq.id}
-                                        className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                                        className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200"
                                     >
                                         <button
                                             onClick={() => toggleItem(faq.id)}
-                                            className="w-full px-5 py-4 flex items-center justify-between text-left group"
+                                            className="w-full px-6 py-5 flex items-start justify-between text-left group gap-4"
                                         >
-                                            <span className="font-medium text-navy-900 pr-4 group-hover:text-gold-600 transition-colors">{faq.question}</span>
+                                            <span className="font-bold text-navy-900 text-base md:text-lg group-hover:text-blue-800 transition-colors leading-snug">
+                                                {faq.question}
+                                            </span>
                                             {openItems.has(faq.id) ? (
-                                                <ChevronUp className="w-5 h-5 text-gold-500 flex-shrink-0" />
+                                                <ChevronUp className="w-5 h-5 text-gray-400 flex-shrink-0 mt-1" />
                                             ) : (
-                                                <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-gold-500 flex-shrink-0 transition-colors" />
+                                                <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-navy-900 flex-shrink-0 transition-colors mt-1" />
                                             )}
                                         </button>
                                         {openItems.has(faq.id) && (
-                                            <div className="px-5 pb-4 border-t border-gray-100 bg-gray-50/50">
-                                                <p className="text-gray-600 whitespace-pre-line leading-relaxed pt-4">
+                                            <div className="px-6 pb-6 pt-0">
+                                                <div className="h-px w-full bg-gray-100 mb-4"></div>
+                                                <p className="text-gray-600 whitespace-pre-line leading-relaxed text-base">
                                                     {faq.answer}
                                                 </p>
                                             </div>

@@ -94,9 +94,9 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 p-4 md:p-14">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
                     {onBack && (
                         <button
@@ -107,15 +107,15 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                             <ArrowLeft className="w-6 h-6 text-gray-600" />
                         </button>
                     )}
-                    <HelpCircle className="w-6 h-6 text-theme-accent" />
-                    <h2 className="text-xl font-bold text-gray-900">FAQ Management</h2>
+                    <HelpCircle className="w-6 h-6 text-navy-900" />
+                    <h2 className="text-xl font-bold text-navy-900">FAQ Management</h2>
                 </div>
                 <button
                     onClick={() => {
                         resetForm();
                         setIsAdding(true);
                     }}
-                    className="flex items-center gap-2 bg-theme-accent text-white px-4 py-2 rounded-lg hover:bg-theme-accent/90 transition-colors"
+                    className="w-full md:w-auto flex items-center justify-center gap-2 bg-navy-900 text-white px-4 py-2 rounded-lg hover:bg-navy-800 transition-colors shadow-sm"
                 >
                     <Plus className="w-4 h-4" />
                     Add FAQ
@@ -143,7 +143,7 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                                 type="text"
                                 value={formData.question}
                                 onChange={(e) => setFormData({ ...formData, question: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-accent focus:border-transparent"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent"
                                 placeholder="Enter the question"
                                 required
                             />
@@ -155,13 +155,13 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                             <textarea
                                 value={formData.answer}
                                 onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-accent focus:border-transparent"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent"
                                 placeholder="Enter the answer (supports line breaks)"
                                 rows={5}
                                 required
                             />
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Category *
@@ -169,7 +169,7 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                                 <select
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-accent focus:border-transparent"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent"
                                 >
                                     {categories.map((cat) => (
                                         <option key={cat} value={cat}>
@@ -186,7 +186,7 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                                     type="number"
                                     value={formData.order_index}
                                     onChange={(e) => setFormData({ ...formData, order_index: parseInt(e.target.value) })}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-accent focus:border-transparent"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-900 focus:border-transparent"
                                     min={1}
                                 />
                             </div>
@@ -197,7 +197,7 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                                 id="is_active"
                                 checked={formData.is_active}
                                 onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                                className="w-4 h-4 rounded border-gray-300 text-theme-accent focus:ring-theme-accent"
+                                className="w-4 h-4 rounded border-gray-300 text-navy-900 focus:ring-navy-900"
                             />
                             <label htmlFor="is_active" className="text-sm text-gray-700">
                                 Active (visible on website)
@@ -206,7 +206,7 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                         <div className="flex gap-3">
                             <button
                                 type="submit"
-                                className="flex items-center gap-2 bg-theme-accent text-white px-4 py-2 rounded-lg hover:bg-theme-accent/90 transition-colors"
+                                className="flex items-center gap-2 bg-navy-900 text-white px-4 py-2 rounded-lg hover:bg-navy-800 transition-colors shadow-sm"
                             >
                                 <Save className="w-4 h-4" />
                                 {editingId ? 'Update FAQ' : 'Save FAQ'}
@@ -225,71 +225,89 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
             )}
 
             {/* FAQ List */}
-            <div className="space-y-3">
+            <div className="space-y-12">
                 {faqs.length === 0 ? (
-                    <div className="text-center py-12 bg-gray-50 rounded-xl">
-                        <HelpCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                        <p className="text-gray-500">No FAQs found. Add your first FAQ above.</p>
+                    <div className="text-center py-16 bg-white rounded-xl border border-gray-200 border-dashed">
+                        <HelpCircle className="w-16 h-16 text-gray-300 mx-auto mb-6" />
+                        <p className="text-gray-500 text-lg">No FAQs found. Add your first FAQ above.</p>
                         <p className="text-sm text-gray-400 mt-2">
                             Note: If the FAQs table doesn't exist in Supabase, default FAQs will be shown on the website.
                         </p>
                     </div>
                 ) : (
-                    faqs.map((faq) => (
-                        <div
-                            key={faq.id}
-                            className={`bg-white border rounded-xl p-4 ${faq.is_active ? 'border-gray-200' : 'border-red-200 bg-red-50/50'
-                                }`}
-                        >
-                            <div className="flex items-start justify-between gap-4">
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
-                                            {faq.category}
-                                        </span>
-                                        <span className="text-xs text-gray-400">#{faq.order_index}</span>
-                                        {!faq.is_active && (
-                                            <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-600">
-                                                Hidden
-                                            </span>
-                                        )}
-                                    </div>
-                                    <h4 className="font-medium text-gray-900 mb-1">{faq.question}</h4>
-                                    <p className="text-sm text-gray-600 whitespace-pre-line line-clamp-2">
-                                        {faq.answer}
-                                    </p>
+                    categories.map(category => {
+                        const categoryFAQs = faqs.filter(faq => faq.category === category);
+                        if (categoryFAQs.length === 0) return null;
+
+                        return (
+                            <div key={category}>
+                                {/* Section Header */}
+                                <div className="flex items-center gap-3 mb-8 px-5 py-4 rounded-lg border border-gold-400 bg-white shadow-sm w-full">
+                                    <HelpCircle className="w-6 h-6 text-gold-500" />
+                                    <h2 className="font-bold text-base md:text-lg uppercase tracking-wide text-navy-900">{category}</h2>
                                 </div>
-                                <div className="flex items-center gap-2 flex-shrink-0">
-                                    <button
-                                        onClick={() => toggleActive(faq)}
-                                        className={`p-2 rounded-lg transition-colors ${faq.is_active
-                                            ? 'text-green-600 hover:bg-green-50'
-                                            : 'text-gray-400 hover:bg-gray-100'
-                                            }`}
-                                        title={faq.is_active ? 'Hide FAQ' : 'Show FAQ'}
-                                    >
-                                        {faq.is_active ? (
-                                            <ChevronUp className="w-4 h-4" />
-                                        ) : (
-                                            <ChevronDown className="w-4 h-4" />
-                                        )}
-                                    </button>
-                                    <button
-                                        onClick={() => handleEdit(faq)}
-                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                    >
-                                        <Edit2 className="w-4 h-4" />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(faq.id)}
-                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
+
+                                <div className="space-y-6">
+                                    {categoryFAQs.map((faq) => (
+                                        <div
+                                            key={faq.id}
+                                            className={`bg-white rounded-xl border shadow-sm hover:shadow-md transition-all duration-200 ${faq.is_active ? 'border-gray-100' : 'border-red-200 bg-red-50/10'}`}
+                                        >
+                                            <div className="px-5 py-5 md:px-8 md:py-6 flex flex-col md:flex-row items-start justify-between gap-4 md:gap-6">
+                                                <div className="flex-1 w-full">
+                                                    <div className="flex items-center gap-3 mb-3">
+                                                        <span className="text-sm font-mono text-gray-400">#{faq.order_index}</span>
+                                                        {!faq.is_active && (
+                                                            <span className="text-xs px-2.5 py-1 rounded-full bg-red-100 text-red-600 font-medium">
+                                                                Hidden
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <h3 className="font-bold text-navy-900 text-lg md:text-xl leading-snug mb-3">
+                                                        {faq.question}
+                                                    </h3>
+                                                    <p className="text-gray-600 whitespace-pre-line leading-relaxed text-base md:text-lg">
+                                                        {faq.answer}
+                                                    </p>
+                                                </div>
+
+                                                <div className="flex items-center gap-2 flex-shrink-0 w-full md:w-auto justify-end md:ml-6 md:self-start border-t md:border-t-0 border-gray-100 pt-4 md:pt-0 mt-2 md:mt-0">
+                                                    <button
+                                                        onClick={() => toggleActive(faq)}
+                                                        className={`p-2.5 rounded-lg transition-colors ${faq.is_active
+                                                            ? 'text-green-600 hover:bg-green-50'
+                                                            : 'text-gray-400 hover:bg-gray-100'
+                                                            }`}
+                                                        title={faq.is_active ? 'Hide FAQ' : 'Show FAQ'}
+                                                    >
+                                                        {faq.is_active ? (
+                                                            <ChevronUp className="w-5 h-5" />
+                                                        ) : (
+                                                            <ChevronDown className="w-5 h-5" />
+                                                        )}
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleEdit(faq)}
+                                                        className="p-2.5 text-navy-900 hover:bg-navy-50 rounded-lg transition-colors"
+                                                        title="Edit FAQ"
+                                                    >
+                                                        <Edit2 className="w-5 h-5" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(faq.id)}
+                                                        className="p-2.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                        title="Delete FAQ"
+                                                    >
+                                                        <Trash2 className="w-5 h-5" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-                        </div>
-                    ))
+                        );
+                    })
                 )}
             </div>
 

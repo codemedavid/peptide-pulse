@@ -54,7 +54,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
   const decrementQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
 
   return (
-    <div className="bg-white h-full flex flex-col group relative border border-gold-400 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200">
+    <div className="bg-white h-full flex flex-col group relative border-2 border-gold-400 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200">
       {/* Click overlay for product details */}
       <div
         onClick={() => onProductClick?.(product)}
@@ -63,7 +63,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
       />
 
       {/* Product Image */}
-      <div className="relative h-48 bg-gray-50 overflow-hidden rounded-t-lg">
+      <div className="relative h-48 bg-gray-50 overflow-hidden rounded-t-xl">
         {product.image_url ? (
           <img
             src={product.image_url}
