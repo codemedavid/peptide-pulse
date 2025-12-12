@@ -36,6 +36,15 @@ const Footer: React.FC = () => {
           <div className="flex flex-wrap items-center gap-4 justify-center md:justify-end">
             {/* Lab Reports & FAQ Removed */}
             {/* WhatsApp Removed */}
+            <a
+              href="https://t.me/+kdn_GOqZXxI1Y2Jl"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-[#0088cc] transition-colors flex items-center gap-2 text-sm font-medium"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Join Community
+            </a>
           </div>
 
         </div>

@@ -57,6 +57,15 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                 >
                   Products
                 </button>
+                <a
+                  href="https://t.me/+kdn_GOqZXxI1Y2Jl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium text-gray-600 hover:text-[#0088cc] transition-colors flex items-center gap-1"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Join Community
+                </a>
                 {/* Lab Reports & FAQ Removed */}
                 {/* WhatsApp Removed */}
               </nav>
@@ -109,6 +118,15 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                 >
                   Products
                 </button>
+                <a
+                  href="https://t.me/+kdn_GOqZXxI1Y2Jl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-left text-theme-text font-medium text-base hover:text-[#0088cc] transition-colors flex items-center gap-2"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  Join Community
+                </a>
                 {/* Lab Reports & FAQ Removed */}
                 <div className="pt-4 border-t border-gray-100 flex flex-col gap-3">
                   {/* WhatsApp Removed */}

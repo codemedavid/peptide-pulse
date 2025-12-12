@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, ShieldCheck, Sparkles, FlaskConical } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Sparkles, FlaskConical, MessageCircle } from 'lucide-react';
 
 type HeroProps = {
   onShopAll?: () => void;
@@ -30,7 +30,7 @@ const Hero: React.FC<HeroProps> = ({ onShopAll }) => {
           <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold text-theme-text mb-4 md:mb-6 tracking-tight leading-tight">
             Premium <span className="text-theme-accent">Peptides</span> & Essentials
             <br className="hidden md:block" />
-            <span className="text-2xl md:text-3xl lg:text-4xl font-medium text-gray-600">— Trusted Quality for Your Journey.</span>
+            <span className="text-2xl md:text-3xl lg:text-4xl font-medium text-gray-600">From the Lab to You — Simplifying Science, One Dose at a Time.</span>
           </h1>
 
           {/* Tagline */}
@@ -40,7 +40,7 @@ const Hero: React.FC<HeroProps> = ({ onShopAll }) => {
 
           {/* Subheading */}
           <p className="text-base md:text-lg text-gray-500 mb-8 md:mb-12 max-w-3xl mx-auto leading-relaxed">
-            Explore our carefully curated selection of high-quality peptides, peptide pens, cartridges, pen needles, and insulin syringes. Each product is personally tested and trusted for purity, safety, and performance — so you can pin with confidence.
+            SlimDose Peptides is your all-in-one destination for high-quality peptides, peptide pens, and the essential accessories you need for a smooth and confident wellness routine. We provide a full range of premium products to support different goals — from vitality and recovery to skin health and body wellness.
           </p>
 
           {/* CTA Buttons */}
@@ -58,6 +58,15 @@ const Hero: React.FC<HeroProps> = ({ onShopAll }) => {
             >
               View Lab Tests & Quality Assurance
               <ShieldCheck className="w-4 h-4" />
+            </a>
+            <a
+              href="https://t.me/+kdn_GOqZXxI1Y2Jl"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-3 rounded-lg font-medium bg-[#0088cc] text-white hover:bg-[#007dba] transition-colors flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              Join Our Telegram Community
+              <MessageCircle className="w-5 h-5" />
             </a>
           </div>
 
