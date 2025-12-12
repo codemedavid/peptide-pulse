@@ -202,11 +202,18 @@ const Cart: React.FC<CartProps> = ({
                 <div className="flex flex-col gap-1 text-gray-700 text-xs md:text-sm">
                   <div className="flex justify-between">
                     <span>Shipping</span>
-                    <span className="text-gray-700 font-medium">Choose your location at checkout.</span>
+                    <span className="text-gray-700 font-medium">Calculated at checkout</span>
                   </div>
-                  <p className="text-gray-500">
-                    Shipping rates apply to small pouches (4.1 × 9.5 inches) with a capacity of up to 3 pens. For bulk orders exceeding this size, our team will contact you for the adjusted shipping fees.
-                  </p>
+                  <div className="mt-2 space-y-1 text-gray-600">
+                    <p className="font-semibold text-theme-text">J&T Shipping Rates:</p>
+                    <ul className="list-disc pl-4 space-y-0.5">
+                      <li>Luzon: ₱150</li>
+                      <li>Visayas: ₱120</li>
+                      <li>Mindanao: ₱90</li>
+                    </ul>
+                    <p className="font-semibold text-theme-text mt-2">Maxim Delivery:</p>
+                    <p className="pl-4">₱0 (Booking fee paid by customer upon delivery)</p>
+                  </div>
                 </div>
 
                 <div className="border-t-2 border-dashed border-gray-200 pt-3 mt-4">
@@ -220,13 +227,15 @@ const Cart: React.FC<CartProps> = ({
                 </div>
               </div>
 
-              <button
-                onClick={onCheckout}
+              <a
+                href="https://www.facebook.com/share/17WHrmHvJc/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-full bg-gradient-to-r from-black to-gray-900 hover:from-gray-900 hover:to-black text-white py-3 md:py-4 rounded-lg font-semibold text-sm md:text-base shadow-lg hover:shadow-gold-glow transform hover:scale-105 transition-all mb-3 flex items-center justify-center gap-2 border border-gold-500/20"
               >
                 <CreditCard className="w-5 h-5" />
-                Proceed to Checkout
-              </button>
+                Proceed via Messenger
+              </a>
 
               <button
                 onClick={onContinueShopping}

@@ -7,10 +7,10 @@ import ImageUpload from './ImageUpload';
 import CategoryManager from './CategoryManager';
 import PaymentMethodManager from './PaymentMethodManager';
 import VariationManager from './VariationManager';
-import COAManager from './COAManager';
+// import COAManager from './COAManager';
 import PeptideInventoryManager from './PeptideInventoryManager';
 import OrdersManager from './OrdersManager';
-import FAQManager from './FAQManager';
+// import FAQManager from './FAQManager';
 import ShippingManager from './ShippingManager';
 
 const AdminDashboard: React.FC = () => {
@@ -21,7 +21,7 @@ const AdminDashboard: React.FC = () => {
   const [loginError, setLoginError] = useState('');
   const { products, loading, addProduct, updateProduct, deleteProduct, refreshProducts } = useMenu();
   const { categories } = useCategories();
-  const [currentView, setCurrentView] = useState<'dashboard' | 'products' | 'add' | 'edit' | 'categories' | 'payments' | 'coa' | 'inventory' | 'orders' | 'faq' | 'shipping'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'products' | 'add' | 'edit' | 'categories' | 'payments' | 'inventory' | 'orders' | 'shipping'>('dashboard');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [managingVariationsProductId, setManagingVariationsProductId] = useState<string | null>(null);
@@ -339,7 +339,7 @@ const AdminDashboard: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'Peptalk@Admin!2025') {
+    if (password === 'Slimdose@Admin!2025') {
       setIsAuthenticated(true);
       localStorage.setItem('peptide_admin_auth', 'true');
       setLoginError('');
@@ -1051,33 +1051,6 @@ const AdminDashboard: React.FC = () => {
     return <PaymentMethodManager onBack={() => setCurrentView('dashboard')} />;
   }
 
-  // COA Lab Reports View
-  if (currentView === 'coa') {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-white">
-        <div className="bg-white shadow-md border-b border-gray-200">
-          <div className="max-w-6xl mx-auto px-3 sm:px-4">
-            <div className="flex items-center justify-between h-12 md:h-14">
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => setCurrentView('dashboard')}
-                  className="text-gray-700 hover:text-theme-accent transition-colors flex items-center gap-1 group"
-                >
-                  <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-                  <span className="text-xs md:text-sm">Dashboard</span>
-                </button>
-                <h1 className="text-sm md:text-base font-bold bg-gradient-to-r from-black to-gray-900 bg-clip-text text-transparent">🔬 Lab Reports (COA)</h1>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="max-w-5xl mx-auto px-3 sm:px-4 py-3 md:py-4">
-          <COAManager />
-        </div>
-      </div>
-    );
-  }
 
   // Inventory View
   if (currentView === 'inventory') {
@@ -1087,34 +1060,6 @@ const AdminDashboard: React.FC = () => {
   // Orders View
   if (currentView === 'orders') {
     return <OrdersManager onBack={() => setCurrentView('dashboard')} />;
-  }
-
-  // FAQ View
-  if (currentView === 'faq') {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-white">
-        <div className="bg-white shadow-md border-b border-gray-200">
-          <div className="max-w-6xl mx-auto px-3 sm:px-4">
-            <div className="flex items-center justify-between h-12 md:h-14">
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => setCurrentView('dashboard')}
-                  className="text-gray-700 hover:text-theme-accent transition-colors flex items-center gap-1 group"
-                >
-                  <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-                  <span className="text-xs md:text-sm">Dashboard</span>
-                </button>
-                <h1 className="text-sm md:text-base font-bold bg-gradient-to-r from-black to-gray-900 bg-clip-text text-transparent">❓ FAQ Management</h1>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="max-w-5xl mx-auto px-3 sm:px-4 py-3 md:py-4">
-          <FAQManager />
-        </div>
-      </div>
-    );
   }
 
   // Shipping View
@@ -1275,15 +1220,6 @@ const AdminDashboard: React.FC = () => {
                   <span className="text-sm font-medium text-gray-700">Payment Methods</span>
                 </button>
                 <button
-                  onClick={() => setCurrentView('coa')}
-                  className="w-full flex items-center gap-3 p-2 text-left hover:bg-gray-50 rounded-lg transition-all"
-                >
-                  <div className="p-1.5 bg-theme-secondary/10 rounded-lg">
-                    <Shield className="h-4 w-4 text-theme-secondary" />
-                  </div>
-                  <span className="text-sm font-medium text-gray-700">Lab Reports (COA)</span>
-                </button>
-                <button
                   onClick={() => setCurrentView('inventory')}
                   className="w-full flex items-center gap-3 p-2 text-left hover:bg-gray-50 rounded-lg transition-all"
                 >
@@ -1300,15 +1236,6 @@ const AdminDashboard: React.FC = () => {
                     <ShoppingCart className="h-4 w-4 text-theme-accent" />
                   </div>
                   <span className="text-sm font-medium text-gray-700">Orders Management</span>
-                </button>
-                <button
-                  onClick={() => setCurrentView('faq')}
-                  className="w-full flex items-center gap-3 p-2 text-left hover:bg-gray-50 rounded-lg transition-all"
-                >
-                  <div className="p-1.5 bg-yellow-50 rounded-lg">
-                    <HelpCircle className="h-4 w-4 text-yellow-600" />
-                  </div>
-                  <span className="text-sm font-medium text-gray-700">FAQ Management</span>
                 </button>
                 <button
                   onClick={() => setCurrentView('shipping')}

@@ -60,7 +60,7 @@ GRANT ALL ON TABLE public.product_variations TO anon, authenticated, service_rol
 
 -- 5. Seed Data
 
--- Clear existing data (Order matters for FKs, though we aren't enforcing FK on category yet)
+-- Clear existing data (Order matters for FKs)
 DELETE FROM public.product_variations;
 DELETE FROM public.products;
 DELETE FROM public.categories;
@@ -72,29 +72,47 @@ INSERT INTO public.categories (id, name, sort_order, icon, active) VALUES
 ('c0a80121-7ac0-4e78-94f8-585d77059125', 'Wellness & Vitality', 3, 'Heart', true),
 ('c0a80121-7ac0-4e78-94f8-585d77059126', 'Insulin Pen', 4, 'Package', true);
 
--- Seed Products (Linking to Categories via ID)
-INSERT INTO public.products (name, description, base_price, category, image_url, featured, available, stock_quantity) VALUES
--- Weight Management (c0a80121-7ac0-4e78-94f8-585d77059123)
-('SlimDose 10mg', 'Premium weight management peptide solution. Laboratory tested for purity.', 2500.00, 'c0a80121-7ac0-4e78-94f8-585d77059123', NULL, true, true, 1),
-('SlimDose 20mg', 'Double strength weight management formula. Enhanced potency.', 3500.00, 'c0a80121-7ac0-4e78-94f8-585d77059123', NULL, true, true, 1),
-('SlimDose 30mg', 'Maximum strength weight management solution. Advanced formula.', 4500.00, 'c0a80121-7ac0-4e78-94f8-585d77059123', NULL, true, true, 1),
-('RetaDose 10mg', 'Next generation GLP-1/GIP/Glucagon agonist.', 3800.00, 'c0a80121-7ac0-4e78-94f8-585d77059123', NULL, true, true, 1),
-('RetaDose 20mg', 'High potency RetaDose for advanced protocols.', 4800.00, 'c0a80121-7ac0-4e78-94f8-585d77059123', NULL, false, true, 1),
-('LipoLemon 10ml', 'Lipolytic solution for targeted fat reduction.', 1900.00, 'c0a80121-7ac0-4e78-94f8-585d77059123', NULL, false, true, 1),
+-- Seed Products with Fixed IDs for Variation Linking
+INSERT INTO public.products (id, name, description, base_price, category, image_url, featured, available, stock_quantity) VALUES
+-- Weight Management
+('d0a80121-7ac0-4e78-94f8-585d77059201', 'SlimDose 10mg', 'Premium weight management peptide solution. Laboratory tested for purity.', 2500.00, 'c0a80121-7ac0-4e78-94f8-585d77059123', NULL, true, true, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059202', 'SlimDose 20mg', 'Double strength weight management formula. Enhanced potency.', 3500.00, 'c0a80121-7ac0-4e78-94f8-585d77059123', NULL, true, true, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059203', 'SlimDose 30mg', 'Maximum strength weight management solution. Advanced formula.', 4500.00, 'c0a80121-7ac0-4e78-94f8-585d77059123', NULL, true, true, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059204', 'RetaDose 10mg', 'Next generation GLP-1/GIP/Glucagon agonist.', 3800.00, 'c0a80121-7ac0-4e78-94f8-585d77059123', NULL, true, true, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059205', 'RetaDose 20mg', 'High potency RetaDose for advanced protocols.', 4800.00, 'c0a80121-7ac0-4e78-94f8-585d77059123', NULL, false, true, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059206', 'LipoLemon 10ml', 'Lipolytic solution for targeted fat reduction.', 1900.00, 'c0a80121-7ac0-4e78-94f8-585d77059123', NULL, false, true, 1),
 
--- Beauty & Anti-Aging (c0a80121-7ac0-4e78-94f8-585d77059124)
-('BeautyDose 100mg', 'GHK-Cu Copper peptide for skin rejuvenation and elasticity.', 2800.00, 'c0a80121-7ac0-4e78-94f8-585d77059124', NULL, true, true, 1),
-('BotoxDose 10mg', 'Argireline peptide solution for fine lines.', 1800.00, 'c0a80121-7ac0-4e78-94f8-585d77059124', NULL, false, true, 1),
-('Topical BeautyDose 1000mg', 'High concentration topical copper peptide formula.', 3500.00, 'c0a80121-7ac0-4e78-94f8-585d77059124', NULL, false, true, 1),
-('GlowDose 70mg', 'Melanotan 2 tanning and vitality peptide.', 1500.00, 'c0a80121-7ac0-4e78-94f8-585d77059124', NULL, false, true, 1),
-('SkinBoost 10mg', 'BPC-157 regenerative peptide for skin and tissue repair.', 2600.00, 'c0a80121-7ac0-4e78-94f8-585d77059124', NULL, true, true, 1),
+-- Beauty & Anti-Aging
+('d0a80121-7ac0-4e78-94f8-585d77059207', 'BeautyDose 100mg', 'GHK-Cu Copper peptide for skin rejuvenation and elasticity.', 2800.00, 'c0a80121-7ac0-4e78-94f8-585d77059124', NULL, true, true, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059208', 'BotoxDose 10mg', 'Argireline peptide solution for fine lines.', 1800.00, 'c0a80121-7ac0-4e78-94f8-585d77059124', NULL, false, true, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059209', 'Topical BeautyDose 1000mg', 'High concentration topical copper peptide formula.', 3500.00, 'c0a80121-7ac0-4e78-94f8-585d77059124', NULL, false, true, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059210', 'GlowDose 70mg', 'Melanotan 2 tanning and vitality peptide.', 1500.00, 'c0a80121-7ac0-4e78-94f8-585d77059124', NULL, false, true, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059211', 'SkinBoost 10mg', 'BPC-157 regenerative peptide for skin and tissue repair.', 2600.00, 'c0a80121-7ac0-4e78-94f8-585d77059124', NULL, true, true, 1),
 
--- Wellness & Vitality (c0a80121-7ac0-4e78-94f8-585d77059125)
-('YouthDose 500mg', 'Epitalon peptide for longevity and cellular health.', 3200.00, 'c0a80121-7ac0-4e78-94f8-585d77059125', NULL, false, true, 1),
-('SlimBoost 5mg', 'MOTS-c mitochondrial optimizer for metabolic support.', 2200.00, 'c0a80121-7ac0-4e78-94f8-585d77059125', NULL, false, true, 1),
-('CalmDose 11mg', 'Selank peptide for stress relief and focus.', 1200.00, 'c0a80121-7ac0-4e78-94f8-585d77059125', NULL, false, true, 1),
-('BrainBoost 11mg', 'Semax peptide for cognitive enhancement and memory.', 1400.00, 'c0a80121-7ac0-4e78-94f8-585d77059125', NULL, false, true, 1),
+-- Wellness & Vitality
+('d0a80121-7ac0-4e78-94f8-585d77059212', 'YouthDose 500mg', 'Epitalon peptide for longevity and cellular health.', 3200.00, 'c0a80121-7ac0-4e78-94f8-585d77059125', NULL, false, true, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059213', 'SlimBoost 5mg', 'MOTS-c mitochondrial optimizer for metabolic support.', 2200.00, 'c0a80121-7ac0-4e78-94f8-585d77059125', NULL, false, true, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059214', 'CalmDose 11mg', 'Selank peptide for stress relief and focus.', 1200.00, 'c0a80121-7ac0-4e78-94f8-585d77059125', NULL, false, true, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059215', 'BrainBoost 11mg', 'Semax peptide for cognitive enhancement and memory.', 1400.00, 'c0a80121-7ac0-4e78-94f8-585d77059125', NULL, false, true, 1),
 
--- Insulin Pen (c0a80121-7ac0-4e78-94f8-585d77059126)
-('SlimPen', 'Precision delivery device for peptide administration.', 1500.00, 'c0a80121-7ac0-4e78-94f8-585d77059126', NULL, false, true, 1),
-('SlimPen Pro', 'Advanced electronic dosage pen with memory function.', 2500.00, 'c0a80121-7ac0-4e78-94f8-585d77059126', NULL, true, true, 1);
+-- Insulin Pen
+('d0a80121-7ac0-4e78-94f8-585d77059216', 'SlimPen', 'Precision delivery device for peptide administration.', 1500.00, 'c0a80121-7ac0-4e78-94f8-585d77059126', NULL, false, true, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059217', 'SlimPen Pro', 'Advanced electronic dosage pen with memory function.', 2500.00, 'c0a80121-7ac0-4e78-94f8-585d77059126', NULL, true, true, 1);
+
+
+-- Seed Variations
+
+-- Helper block for injecting Vials Only/Set variations for all Peptides (IDs 9201 to 9215)
+-- We insert two variations per product. Price is set to base_price (can be adjusted by admin later)
+INSERT INTO public.product_variations (product_id, name, price, stock_quantity)
+SELECT id, 'Vials Only', base_price, 1 FROM public.products WHERE category IN ('c0a80121-7ac0-4e78-94f8-585d77059123', 'c0a80121-7ac0-4e78-94f8-585d77059124', 'c0a80121-7ac0-4e78-94f8-585d77059125');
+
+INSERT INTO public.product_variations (product_id, name, price, stock_quantity)
+SELECT id, 'Set', base_price + 500, 1 FROM public.products WHERE category IN ('c0a80121-7ac0-4e78-94f8-585d77059123', 'c0a80121-7ac0-4e78-94f8-585d77059124', 'c0a80121-7ac0-4e78-94f8-585d77059125');
+
+-- Seed Variations for SlimPen Pro (d0a80121-7ac0-4e78-94f8-585d77059217)
+INSERT INTO public.product_variations (product_id, name, price, stock_quantity) VALUES
+('d0a80121-7ac0-4e78-94f8-585d77059217', 'Cloud Pink', 2500.00, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059217', 'Sea Green', 2500.00, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059217', 'Champagne Gold', 2500.00, 1),
+('d0a80121-7ac0-4e78-94f8-585d77059217', 'Mystic Black', 2500.00, 1);

@@ -1,14 +1,14 @@
 import React from 'react';
 import { MessageCircle, Shield, Heart, HelpCircle } from 'lucide-react';
-import { useCOAPageSetting } from '../hooks/useCOAPageSetting';
+// import { useCOAPageSetting } from '../hooks/useCOAPageSetting';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
-  const { coaPageEnabled } = useCOAPageSetting();
+  //   const { coaPageEnabled } = useCOAPageSetting();
 
   // Contact Links
-  const whatsappMessage = encodeURIComponent('Hi! I would like to inquire about your products.');
-  const whatsappUrl = `https://wa.me/639062349763?text=${whatsappMessage}`;
+  //   const whatsappMessage = encodeURIComponent('Hi! I would like to inquire about your products.');
+  //   const whatsappUrl = `https://wa.me/639062349763?text=${whatsappMessage}`;
 
   return (
     <footer className="bg-white border-t border-gray-100 pt-12 pb-6">
@@ -34,31 +34,8 @@ const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div className="flex flex-wrap items-center gap-4 justify-center md:justify-end">
-            {coaPageEnabled && (
-              <a
-                href="/coa"
-                className="flex items-center gap-2 text-gray-600 hover:text-theme-accent transition-colors text-sm font-medium"
-              >
-                <Shield className="w-4 h-4" />
-                <span>Lab Reports</span>
-              </a>
-            )}
-            <a
-              href="/faq"
-              className="flex items-center gap-2 text-gray-600 hover:text-theme-accent transition-colors text-sm font-medium"
-            >
-              <HelpCircle className="w-4 h-4" />
-              <span>FAQ</span>
-            </a>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-gray-600 hover:text-theme-accent transition-colors text-sm font-medium"
-            >
-              <MessageCircle className="w-4 h-4" />
-              <span>WhatsApp</span>
-            </a>
+            {/* Lab Reports & FAQ Removed */}
+            {/* WhatsApp Removed */}
           </div>
 
         </div>
