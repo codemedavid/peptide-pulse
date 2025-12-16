@@ -81,7 +81,7 @@ const ShippingManager: React.FC<ShippingManagerProps> = ({ onBack }) => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-white">
             {/* Header */}
-            <div className="bg-white shadow-md border-b border-gold-300/30">
+            <div className="bg-white shadow-md border-b border-navy-700/30">
                 <div className="max-w-4xl mx-auto px-3 sm:px-4">
                     <div className="flex items-center justify-between h-12 md:h-14">
                         <div className="flex items-center space-x-2">

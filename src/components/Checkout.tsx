@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { ArrowLeft, ShieldCheck, Package, CreditCard, Sparkles, Heart, Copy, Check, MessageCircle } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Package, CreditCard, Sparkles, Heart, Copy, Check, MessageCircle, Tag, XCircle, CheckCircle, Upload, X, FileImage, Loader2 } from 'lucide-react';
 import type { CartItem } from '../types';
 import { usePaymentMethods } from '../hooks/usePaymentMethods';
 import { useShippingLocations } from '../hooks/useShippingLocations';
 import { supabase } from '../lib/supabase';
+import { useImageUpload } from '../hooks/useImageUpload';
 
 interface CheckoutProps {
   cartItems: CartItem[];
@@ -34,10 +35,21 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
   const [contactMethod, setContactMethod] = useState<'messenger' | ''>('messenger');
   const [notes, setNotes] = useState('');
 
-  // Order message for copying
   const [orderMessage, setOrderMessage] = useState<string>('');
   const [copied, setCopied] = useState(false);
   const [contactOpened, setContactOpened] = useState(false);
+
+  // Payment Proof
+  const [paymentProof, setPaymentProof] = useState<File | null>(null);
+  const { uploadImage, uploading: isUploadingProof } = useImageUpload('payment-proofs'); // Use the new bucket
+
+  // Promo Code State
+  const [promoCode, setPromoCode] = useState('');
+  const [appliedPromo, setAppliedPromo] = useState<any>(null);
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
+  const [promoError, setPromoError] = useState('');
+  const [promoSuccess, setPromoSuccess] = useState('');
 
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -51,7 +63,92 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
 
   // Calculate shipping fee based on location (uses dynamic fees from database)
   const shippingFee = shippingLocation ? getShippingFee(shippingLocation) : 0;
-  const finalTotal = totalPrice + shippingFee;
+
+  // Calculate final total (Subtotal + Shipping - Discount)
+  const finalTotal = Math.max(0, totalPrice + shippingFee - discountAmount);
+
+  // Handle Promo Code Application
+  const handleApplyPromoCode = async () => {
+    setPromoError('');
+    setPromoSuccess('');
+    setAppliedPromo(null);
+    setDiscountAmount(0);
+
+    const code = promoCode.trim().toUpperCase();
+    if (!code) {
+      setPromoError('Please enter a promo code');
+      return;
+    }
+
+    setIsApplyingPromo(true);
+
+    try {
+      const { data: promo, error } = await supabase
+        .from('promo_codes')
+        .select('*')
+        .eq('code', code)
+        .eq('active', true)
+        .single();
+
+      if (error || !promo) {
+        setPromoError('Invalid or inactive promo code');
+        setIsApplyingPromo(false);
+        return;
+      }
+
+      // Check date validity
+      const now = new Date();
+      if (promo.start_date && new Date(promo.start_date) > now) {
+        setPromoError('Promo code is not yet valid');
+        setIsApplyingPromo(false);
+        return;
+      }
+      if (promo.end_date && new Date(promo.end_date) < now) {
+        setPromoError('Promo code has expired');
+        setIsApplyingPromo(false);
+        return;
+      }
+
+      // Check usage limits
+      if (promo.usage_limit && promo.usage_count >= promo.usage_limit) {
+        setPromoError('Promo code usage limit reached');
+        setIsApplyingPromo(false);
+        return;
+      }
+
+      // Check minimum purchase
+      if (totalPrice < promo.min_purchase_amount) {
+        setPromoError(`Minimum purchase of ₱${promo.min_purchase_amount} required`);
+        setIsApplyingPromo(false);
+        return;
+      }
+
+      // Calculate discount
+      let discount = 0;
+      if (promo.discount_type === 'percentage') {
+        discount = (totalPrice * promo.discount_value) / 100;
+        if (promo.max_discount_amount) {
+          discount = Math.min(discount, promo.max_discount_amount);
+        }
+      } else {
+        discount = promo.discount_value;
+      }
+
+      // Ensure discount doesn't exceed total (excluding shipping usually, ensuring not negative)
+      // Here we allow discount to cover shipping too? Usually not, but finalTotal math handles it.
+      // Ideally discount applies to subtotal.
+      discount = Math.min(discount, totalPrice);
+
+      setDiscountAmount(discount);
+      setAppliedPromo(promo);
+      setPromoSuccess(`Promo code applied! You saved ₱${discount.toLocaleString()}`);
+    } catch (err) {
+      console.error('Error applying promo:', err);
+      setPromoError('Failed to apply promo code');
+    } finally {
+      setIsApplyingPromo(false);
+    }
+  };
 
   const isDetailsValid =
     fullName.trim() !== '' &&
@@ -82,9 +179,26 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
       return;
     }
 
+    if (!paymentProof) {
+      alert('Please upload a screenshot of your payment proof to proceed.');
+      return;
+    }
+
     const paymentMethod = paymentMethods.find(pm => pm.id === selectedPaymentMethod);
 
     try {
+      // 1. Upload Payment Proof First
+      let paymentProofUrl = null;
+      if (paymentProof) {
+        try {
+          paymentProofUrl = await uploadImage(paymentProof);
+        } catch (uploadError: any) {
+          console.error('Failed to upload payment proof:', uploadError);
+          alert(`Failed to upload payment proof: ${uploadError.message}`);
+          return;
+        }
+      }
+
       // Prepare order items for database
       const orderItems = cartItems.map(item => ({
         product_id: item.product.id,
@@ -110,16 +224,19 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
           shipping_state: state,
           shipping_zip_code: zipCode,
           order_items: orderItems,
-          total_price: totalPrice,
+          total_price: finalTotal, // Use finalTotal which includes discount
           shipping_fee: shippingFee,
           shipping_location: shippingLocation,
           payment_method_id: paymentMethod?.id || null,
           payment_method_name: paymentMethod?.name || null,
-          payment_proof_url: null,
+          payment_proof_url: paymentProofUrl,
           contact_method: contactMethod || null,
           notes: notes.trim() || null,
           order_status: 'new',
-          payment_status: 'pending'
+          payment_status: 'pending',
+          promo_code_id: appliedPromo?.id || null,
+          promo_code: appliedPromo?.code || null,
+          discount_applied: discountAmount
         }])
         .select()
         .single();
@@ -137,6 +254,18 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
 
         alert(`Failed to save order: ${errorMessage}\n\nPlease contact support if this issue persists.`);
         return;
+      }
+
+      // Update promo code usage count
+      if (appliedPromo) {
+        const { error: promoUpdateError } = await supabase
+          .from('promo_codes')
+          .update({ usage_count: appliedPromo.usage_count + 1 })
+          .eq('id', appliedPromo.id);
+
+        if (promoUpdateError) {
+          console.error('Failed to update promo usage count:', promoUpdateError);
+        }
       }
 
       console.log('✅ Order saved to database:', orderData);
@@ -186,14 +315,14 @@ ${cartItems.map(item => {
 💰 PRICING
 Product Total: ₱${totalPrice.toLocaleString('en-PH', { minimumFractionDigits: 0 })}
 Shipping Fee: ₱${shippingFee.toLocaleString('en-PH', { minimumFractionDigits: 0 })} (${shippingLocation.replace('_', ' & ')})
-Grand Total: ₱${finalTotal.toLocaleString('en-PH', { minimumFractionDigits: 0 })}
+${discountAmount > 0 ? `Discount (${appliedPromo?.code}): -₱${discountAmount.toLocaleString('en-PH', { minimumFractionDigits: 0 })}\n` : ''}Grand Total: ₱${finalTotal.toLocaleString('en-PH', { minimumFractionDigits: 0 })}
 
 💳 PAYMENT METHOD
 ${paymentMethod?.name || 'N/A'}
 ${paymentMethod ? `Account: ${paymentMethod.account_number}` : ''}
 
 📸 PROOF OF PAYMENT
-Please attach your payment screenshot when sending this message.
+${paymentProofUrl ? 'Screenshot attached to order.' : 'Pending'}
 
 📱 CONTACT METHOD
 Messenger: https://m.me/SlimDosePeptides
@@ -285,7 +414,7 @@ Please confirm this order. Thank you!
     return (
       <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-white flex items-center justify-center px-4 py-12">
         <div className="max-w-2xl w-full">
-          <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 text-center border-2 border-gold-300/30">
+          <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 text-center border-2 border-navy-700/30">
             <div className="bg-gradient-to-br from-gold-500 to-gold-600 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl animate-bounce border-2 border-gold-700">
               <ShieldCheck className="w-14 h-14 text-black" />
             </div>
@@ -298,7 +427,7 @@ Please confirm this order. Thank you!
             </p>
 
             {/* Order Message Display */}
-            <div className="bg-gray-50 rounded-2xl p-6 mb-6 text-left border-2 border-gold-300/30">
+            <div className="bg-gray-50 rounded-2xl p-6 mb-6 text-left border-2 border-navy-700/30">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-bold text-navy-900 flex items-center gap-2">
                   <MessageCircle className="w-5 h-5 text-gold-600" />
@@ -306,7 +435,7 @@ Please confirm this order. Thank you!
                 </h3>
                 <button
                   onClick={handleCopyMessage}
-                  className="flex items-center gap-2 px-4 py-2 bg-navy-900 hover:bg-navy-800 text-white rounded-lg font-medium transition-all text-sm shadow-md hover:shadow-lg border border-gold-500/20"
+                  className="flex items-center gap-2 px-4 py-2 bg-navy-900 hover:bg-navy-800 text-white rounded-lg font-medium transition-all text-sm shadow-md hover:shadow-lg border border-navy-900/20"
                 >
                   {copied ? (
                     <>
@@ -338,7 +467,7 @@ Please confirm this order. Thank you!
             <div className="space-y-3 mb-8">
               <button
                 onClick={handleOpenContact}
-                className="w-full bg-navy-900 hover:bg-navy-800 text-white py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all flex items-center justify-center gap-2 border border-gold-500/20"
+                className="w-full bg-navy-900 hover:bg-navy-800 text-white py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all flex items-center justify-center gap-2 border border-navy-900/20"
               >
                 <MessageCircle className="w-5 h-5" />
                 Open Messenger
@@ -351,7 +480,7 @@ Please confirm this order. Thank you!
               )}
             </div>
 
-            <div className="bg-gradient-to-r from-gold-50 to-gold-100/50 rounded-2xl p-6 mb-8 text-left border-2 border-gold-300/30">
+            <div className="bg-gradient-to-r from-gold-50 to-gold-100/50 rounded-2xl p-6 mb-8 text-left border-2 border-navy-700/30">
               <h3 className="font-bold text-navy-900 mb-4 flex items-center gap-2">
                 What Happens Next?
                 <Sparkles className="w-5 h-5 text-gold-600" />
@@ -413,7 +542,7 @@ Please confirm this order. Thank you!
             {/* Main Form */}
             <div className="lg:col-span-2 space-y-4 md:space-y-6">
               {/* Customer Information */}
-              <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-gold-300/30">
+              <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-navy-700/30">
                 <h2 className="text-lg md:text-xl font-bold text-navy-900 mb-4 md:mb-6 flex items-center gap-2">
                   <div className="bg-gradient-to-br from-gold-500 to-gold-600 p-2 rounded-xl">
                     <Package className="w-5 h-5 md:w-6 md:h-6 text-black" />
@@ -464,7 +593,7 @@ Please confirm this order. Thank you!
               </div>
 
               {/* Shipping Address */}
-              <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-gold-300/30">
+              <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-navy-700/30">
                 <h2 className="text-lg md:text-xl font-bold text-navy-900 mb-4 md:mb-6 flex items-center gap-2">
                   <div className="bg-gradient-to-br from-gold-500 to-gold-600 p-2 rounded-xl">
                     <Package className="w-5 h-5 md:w-6 md:h-6 text-black" />
@@ -543,7 +672,7 @@ Please confirm this order. Thank you!
               </div>
 
               {/* Shipping Location Selection */}
-              <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-gold-300/30">
+              <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-navy-700/30">
                 <h2 className="text-lg md:text-xl font-bold text-navy-900 mb-2 md:mb-3 flex items-center gap-2">
                   <Package className="w-5 h-5 md:w-6 md:h-6 text-gold-600" />
                   Choose Shipping Location *
@@ -557,8 +686,8 @@ Please confirm this order. Thank you!
                       key={loc.id}
                       onClick={() => setShippingLocation(loc.id as 'LUZON' | 'VISAYAS' | 'MINDANAO' | 'MAXIM')}
                       className={`p-3 rounded-lg border-2 transition-all ${shippingLocation === loc.id
-                        ? 'border-gold-500 bg-gold-50'
-                        : 'border-gray-200 hover:border-gold-300'
+                        ? 'border-navy-900 bg-gold-50'
+                        : 'border-gray-200 hover:border-navy-700'
                         }`}
                     >
                       <p className="font-semibold text-navy-900 text-sm">{loc.id.replace('_', ' & ')}</p>
@@ -572,7 +701,7 @@ Please confirm this order. Thank you!
                 onClick={handleProceedToPayment}
                 disabled={!isDetailsValid}
                 className={`w-full py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg transition-all transform shadow-lg ${isDetailsValid
-                  ? 'bg-navy-900 hover:bg-navy-800 text-white hover:scale-105 hover:shadow-xl border border-gold-500/20'
+                  ? 'bg-navy-900 hover:bg-navy-800 text-white hover:scale-105 hover:shadow-xl border border-navy-900/20'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   }`}
               >
@@ -582,7 +711,7 @@ Please confirm this order. Thank you!
 
             {/* Order Summary Sidebar */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl shadow-xl p-5 md:p-6 sticky top-24 border-2 border-gold-300/30">
+              <div className="bg-white rounded-2xl shadow-xl p-5 md:p-6 sticky top-24 border-2 border-navy-700/30">
                 <h2 className="text-lg md:text-xl font-bold text-navy-900 mb-4 md:mb-6 flex items-center gap-2">
                   Order Summary
                   <Sparkles className="w-5 h-5 text-gold-600" />
@@ -612,11 +741,77 @@ Please confirm this order. Thank you!
                   ))}
                 </div>
 
-                <div className="space-y-3 mb-6">
+                <div className="space-y-4 mb-6">
+                  {/* Promo Code Input */}
+                  <div className="pt-2 pb-4 border-b border-gray-100">
+                    <p className="text-sm font-medium text-navy-900 mb-2 flex items-center gap-1">
+                      <Tag className="w-3.5 h-3.5 text-gold-600" />
+                      Have a promo code?
+                    </p>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={promoCode}
+                        onChange={(e) => setPromoCode(e.target.value)}
+                        placeholder="Enter code"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-gold-400 focus:border-transparent outline-none uppercase"
+                        disabled={!!appliedPromo || isApplyingPromo}
+                      />
+                      {appliedPromo ? (
+                        <button
+                          onClick={() => {
+                            setAppliedPromo(null);
+                            setDiscountAmount(0);
+                            setPromoCode('');
+                            setPromoSuccess('');
+                          }}
+                          className="px-4 py-2 bg-red-100 text-red-600 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors"
+                        >
+                          Remove
+                        </button>
+                      ) : (
+                        <button
+                          onClick={handleApplyPromoCode}
+                          disabled={!promoCode || isApplyingPromo}
+                          className="px-4 py-2 bg-navy-900 text-white rounded-lg text-sm font-medium hover:bg-navy-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                          {isApplyingPromo ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            'Apply'
+                          )}
+                        </button>
+                      )}
+                    </div>
+                    {promoError && (
+                      <p className="text-xs text-red-500 mt-2 flex items-center gap-1">
+                        <XCircle className="w-3.5 h-3.5" />
+                        {promoError}
+                      </p>
+                    )}
+                    {promoSuccess && (
+                      <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
+                        <CheckCircle className="w-3.5 h-3.5" />
+                        {promoSuccess}
+                      </p>
+                    )}
+                  </div>
+
                   <div className="flex justify-between text-gray-600">
                     <span>Subtotal</span>
                     <span className="font-medium">₱{totalPrice.toLocaleString('en-PH', { minimumFractionDigits: 0 })}</span>
                   </div>
+
+                  {discountAmount > 0 && (
+                    <div className="flex justify-between text-green-600">
+                      <span className="flex items-center gap-1">
+                        <Tag className="w-3 h-3" />
+                        Discount ({appliedPromo?.code})
+                      </span>
+                      <span className="font-medium">-₱{discountAmount.toLocaleString('en-PH', { minimumFractionDigits: 0 })}</span>
+                    </div>
+                  )}
+
                   <div className="flex justify-between text-gray-600 text-xs">
                     <span>Shipping</span>
                     <span className="font-medium text-gold-600">
@@ -666,7 +861,7 @@ Please confirm this order. Thank you!
           {/* Payment Form */}
           <div className="lg:col-span-2 space-y-4 md:space-y-6">
             {/* Shipping Location Selection */}
-            <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-gold-300/30">
+            <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-navy-700/30">
               <h2 className="text-lg md:text-xl font-bold text-navy-900 mb-2 md:mb-3 flex items-center gap-2">
                 <Package className="w-5 h-5 md:w-6 md:h-6 text-gold-600" />
                 Choose Shipping Location *
@@ -680,8 +875,8 @@ Please confirm this order. Thank you!
                     key={loc.id}
                     onClick={() => setShippingLocation(loc.id as 'LUZON' | 'VISAYAS' | 'MINDANAO' | 'MAXIM')}
                     className={`p-4 rounded-lg border-2 transition-all flex items-center justify-between ${shippingLocation === loc.id
-                      ? 'border-gold-500 bg-gold-50'
-                      : 'border-gray-200 hover:border-gold-300'
+                      ? 'border-navy-900 bg-gold-50'
+                      : 'border-gray-200 hover:border-navy-700'
                       }`}
                   >
                     <div className="text-left">
@@ -699,7 +894,7 @@ Please confirm this order. Thank you!
             </div>
 
             {/* Payment Method Selection */}
-            <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-gold-300/30">
+            <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-navy-700/30">
               <h2 className="text-lg md:text-xl font-bold text-navy-900 mb-4 md:mb-6 flex items-center gap-2">
                 <div className="bg-gradient-to-br from-gold-500 to-gold-600 p-2 rounded-xl">
                   <CreditCard className="w-5 h-5 md:w-6 md:h-6 text-black" />
@@ -713,8 +908,8 @@ Please confirm this order. Thank you!
                     key={method.id}
                     onClick={() => setSelectedPaymentMethod(method.id)}
                     className={`p-4 rounded-lg border-2 transition-all flex items-center justify-between ${selectedPaymentMethod === method.id
-                      ? 'border-gold-500 bg-gold-50'
-                      : 'border-gray-200 hover:border-gold-300'
+                      ? 'border-navy-900 bg-gold-50'
+                      : 'border-gray-200 hover:border-navy-700'
                       }`}
                   >
                     <div className="flex items-center gap-3">
@@ -736,7 +931,7 @@ Please confirm this order. Thank you!
               </div>
 
               {paymentMethodInfo && (
-                <div className="bg-gold-50 rounded-lg p-6 border border-gold-200">
+                <div className="bg-gold-50 rounded-lg p-6 border border-navy-600">
                   <h3 className="font-semibold text-navy-900 mb-4">Payment Details</h3>
                   <div className="space-y-2 text-sm text-gray-700 mb-4">
                     <p><strong>Account Number:</strong> {paymentMethodInfo.account_number}</p>
@@ -761,7 +956,7 @@ Please confirm this order. Thank you!
             </div>
 
             {/* Contact Method Selection */}
-            <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-gold-300/30">
+            <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-navy-700/30">
               <h2 className="text-lg md:text-xl font-bold text-navy-900 mb-4 md:mb-6 flex items-center gap-2">
                 <MessageCircle className="w-5 h-5 md:w-6 md:h-6 text-gold-600" />
                 Preferred Contact Method *
@@ -770,8 +965,8 @@ Please confirm this order. Thank you!
                 <button
                   onClick={() => setContactMethod('messenger')}
                   className={`p-4 rounded-lg border-2 transition-all flex items-center justify-between ${contactMethod === 'messenger'
-                    ? 'border-gold-500 bg-gold-50'
-                    : 'border-gray-200 hover:border-gold-300'
+                    ? 'border-navy-900 bg-gold-50'
+                    : 'border-gray-200 hover:border-navy-700'
                     }`}
                 >
                   <div className="flex items-center gap-3">
@@ -790,8 +985,67 @@ Please confirm this order. Thank you!
               </div>
             </div>
 
+            {/* Payment Proof Upload */}
+            <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-navy-700/30">
+              <h2 className="text-lg md:text-xl font-bold text-navy-900 mb-4 flex items-center gap-2">
+                <FileImage className="w-5 h-5 text-gold-600" />
+                Upload Payment Proof *
+              </h2>
+              <p className="text-sm text-gray-600 mb-4">
+                Please upload a screenshot of your payment receipt (GCash, Bank Transfer, etc.).
+              </p>
+
+              {!paymentProof ? (
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-blue-300 border-dashed rounded-lg cursor-pointer bg-blue-50 hover:bg-blue-100 transition-colors">
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <Upload className="w-8 h-8 text-blue-500 mb-2" />
+                    <p className="text-sm text-gray-500"><span className="font-semibold">Click to upload</span> payment screenshot</p>
+                    <p className="text-xs text-gray-400 mt-1">PNG, JPG or JPEG (MAX. 10MB)</p>
+                  </div>
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        setPaymentProof(e.target.files[0]);
+                      }
+                    }}
+                  />
+                </label>
+              ) : (
+                <div className="relative bg-white p-4 rounded-lg border border-gray-200 flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center overflow-hidden">
+                    {paymentProof.type.startsWith('image/') ? (
+                      <img
+                        src={URL.createObjectURL(paymentProof)}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <FileImage className="w-6 h-6 text-gray-400" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {paymentProof.name}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {(paymentProof.size / 1024 / 1024).toFixed(2)} MB
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setPaymentProof(null)}
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <X className="w-5 h-5 text-gray-500" />
+                  </button>
+                </div>
+              )}
+            </div>
+
             {/* Additional Notes */}
-            <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-gold-300/30">
+            <div className="bg-white rounded-2xl shadow-lg p-5 md:p-6 border-2 border-navy-700/30">
               <h2 className="text-lg md:text-xl font-bold text-navy-900 mb-4 flex items-center gap-2">
                 <div className="bg-gradient-to-br from-gold-500 to-gold-600 p-2 rounded-xl">
                   <MessageCircle className="w-5 h-5 text-black" />
@@ -809,20 +1063,26 @@ Please confirm this order. Thank you!
 
             <button
               onClick={handlePlaceOrder}
-              disabled={!contactMethod || !shippingLocation}
-              className={`w-full py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg shadow-lg transition-all flex items-center justify-center gap-2 ${contactMethod && shippingLocation
-                ? 'bg-navy-900 hover:bg-navy-800 text-white hover:shadow-xl transform hover:scale-105 border border-gold-500/20'
+              disabled={!contactMethod || !shippingLocation || !paymentProof || isUploadingProof}
+              className={`w-full py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg shadow-lg transition-all flex items-center justify-center gap-2 ${contactMethod && shippingLocation && paymentProof && !isUploadingProof
+                ? 'bg-navy-900 hover:bg-navy-800 text-white hover:shadow-xl transform hover:scale-105 border border-navy-900/20'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
             >
               <ShieldCheck className="w-5 h-5 md:w-6 md:h-6" />
               Complete Order
             </button>
+            {isUploadingProof && (
+              <div className="mt-2 text-center text-sm text-gray-500 flex items-center justify-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Uploading payment proof...
+              </div>
+            )}
           </div>
 
           {/* Order Summary Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-xl p-5 md:p-6 sticky top-24 border-2 border-gold-300/30">
+            <div className="bg-white rounded-2xl shadow-xl p-5 md:p-6 sticky top-24 border-2 border-navy-700/30">
               <h2 className="text-lg md:text-xl font-bold text-navy-900 mb-4 md:mb-6 flex items-center gap-2">
                 Final Summary
                 <Sparkles className="w-5 h-5 text-gold-600" />

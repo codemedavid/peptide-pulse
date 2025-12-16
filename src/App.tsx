@@ -12,6 +12,9 @@ import AdminDashboard from './components/AdminDashboard';
 import COA from './components/COA';
 import FAQ from './components/FAQ';
 import PeptideCalculator from './components/PeptideCalculator';
+import OrderTracking from './components/OrderTracking';
+import SmartGuide from './components/SmartGuide';
+import ArticleDetail from './components/ArticleDetail';
 import { useMenu } from './hooks/useMenu';
 // import { useCOAPageSetting } from './hooks/useCOAPageSetting';
 
@@ -103,6 +106,9 @@ function App() {
         <Route path="/coa" element={<COA />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/calculator" element={<PeptideCalculator />} />
+        <Route path="/track-order" element={<OrderTracking />} />
+        <Route path="/smart-guide" element={<SmartGuide />} />
+        <Route path="/smart-guide/:id" element={<ArticleDetail />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>

@@ -267,7 +267,7 @@ const COAManager: React.FC<COAManagerProps> = ({ onBack }) => {
         </div>
         <div className="flex items-center gap-3">
           {/* COA Page Toggle */}
-          <div className="flex items-center gap-2 bg-white border border-gold-300/30 rounded-lg px-3 py-2 shadow-sm">
+          <div className="flex items-center gap-2 bg-white border border-navy-700/30 rounded-lg px-3 py-2 shadow-sm">
             <span className="text-xs font-medium text-gray-700">Show COA Page:</span>
             <label className="relative inline-flex items-center cursor-pointer">
               <input

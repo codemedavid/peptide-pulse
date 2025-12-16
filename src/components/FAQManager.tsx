@@ -242,7 +242,7 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                         return (
                             <div key={category}>
                                 {/* Section Header */}
-                                <div className="flex items-center gap-3 mb-8 px-5 py-4 rounded-lg border border-gold-400 bg-white shadow-sm w-full">
+                                <div className="flex items-center gap-3 mb-8 px-5 py-4 rounded-lg border border-navy-900 bg-white shadow-sm w-full">
                                     <HelpCircle className="w-6 h-6 text-gold-500" />
                                     <h2 className="font-bold text-base md:text-lg uppercase tracking-wide text-navy-900">{category}</h2>
                                 </div>

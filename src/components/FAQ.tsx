@@ -10,10 +10,10 @@ const categoryIcons: { [key: string]: React.ReactElement } = {
 };
 
 const categoryColors: { [key: string]: string } = {
-    'PRODUCT & USAGE': 'text-navy-900 border-gold-400 bg-gold-50/50',
-    'ORDERING & PACKAGING': 'text-navy-900 border-gold-400 bg-gold-50/50',
-    'PAYMENT METHODS': 'text-navy-900 border-gold-400 bg-gold-50/50',
-    'SHIPPING & DELIVERY': 'text-navy-900 border-gold-400 bg-gold-50/50',
+    'PRODUCT & USAGE': 'text-navy-900 border-navy-900 bg-gold-50/50',
+    'ORDERING & PACKAGING': 'text-navy-900 border-navy-900 bg-gold-50/50',
+    'PAYMENT METHODS': 'text-navy-900 border-navy-900 bg-gold-50/50',
+    'SHIPPING & DELIVERY': 'text-navy-900 border-navy-900 bg-gold-50/50',
 };
 
 const FAQ: React.FC = () => {
@@ -50,7 +50,7 @@ const FAQ: React.FC = () => {
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
-            <div className="bg-white border-b-4 border-gold-400 sticky top-0 z-10 shadow-sm">
+            <div className="bg-white border-b-4 border-navy-900 sticky top-0 z-10 shadow-sm">
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex items-center gap-4">
                         <a
@@ -100,7 +100,7 @@ const FAQ: React.FC = () => {
                 {(activeCategory ? [activeCategory] : categories).map(category => (
                     <div key={category} className="mb-10">
                         {/* Section Header */}
-                        <div className="flex items-center gap-3 mb-6 px-4 py-3 rounded-lg border border-gold-400 bg-white shadow-sm w-full">
+                        <div className="flex items-center gap-3 mb-6 px-4 py-3 rounded-lg border border-navy-900 bg-white shadow-sm w-full">
                             <span className="text-gold-500">
                                 {categoryIcons[category] || <HelpCircle className="w-5 h-5" />}
                             </span>
@@ -143,7 +143,7 @@ const FAQ: React.FC = () => {
                 ))}
 
                 {/* Contact CTA */}
-                <div className="mt-12 bg-white rounded-2xl border border-gold-400/30 p-6 md:p-8 text-center shadow-lg">
+                <div className="mt-12 bg-white rounded-2xl border border-navy-900/30 p-6 md:p-8 text-center shadow-lg">
                     <h3 className="text-lg md:text-xl font-bold text-navy-900 mb-2">
                         Still have questions?
                     </h3>

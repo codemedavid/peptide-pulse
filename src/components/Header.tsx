@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useCOAPageSetting } from '../hooks/useCOAPageSetting';
-import { ShoppingCart, Menu, X, MessageCircle, Calculator, FileText, HelpCircle } from 'lucide-react';
+import { ShoppingCart, Menu, X, MessageCircle, Calculator, FileText, HelpCircle, Truck, BookOpen } from 'lucide-react';
 
 interface HeaderProps {
   cartItemsCount: number;
@@ -12,13 +12,9 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { coaPageEnabled } = useCOAPageSetting();
 
-  // Contact Links
-  //   const whatsappMessage = encodeURIComponent('Hi! I am interested in your products.');
-  //   const whatsappUrl = `https://wa.me/639062349763?text=${whatsappMessage}`;
-
   return (
     <>
-      <header className="bg-white sticky top-0 z-50 border-b-4 border-gold-400 shadow-sm">
+      <header className="bg-white sticky top-0 z-50 border-b-4 border-navy-900 shadow-sm">
         <div className="container mx-auto px-4 md:px-6 py-3 md:py-4">
           <div className="flex items-center justify-between gap-4">
             {/* Logo and Brand */}
@@ -58,6 +54,13 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                   Products
                 </button>
                 <a
+                  href="/track-order"
+                  className="text-sm font-medium text-gray-600 hover:text-theme-accent transition-colors flex items-center gap-1"
+                >
+                  <Truck className="w-4 h-4" />
+                  Track Order
+                </a>
+                <a
                   href="/calculator"
                   className="text-sm font-medium text-gray-600 hover:text-theme-accent transition-colors flex items-center gap-1"
                 >
@@ -81,6 +84,13 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                   FAQ
                 </a>
                 <a
+                  href="/smart-guide"
+                  className="text-sm font-medium text-gray-600 hover:text-theme-accent transition-colors flex items-center gap-1"
+                >
+                  <BookOpen className="w-4 h-4" />
+                  Smart Guide
+                </a>
+                <a
                   href="https://t.me/+kdn_GOqZXxI1Y2Jl"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -89,8 +99,6 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                   <MessageCircle className="w-4 h-4" />
                   Join Community
                 </a>
-                {/* Lab Reports & FAQ Removed */}
-                {/* WhatsApp Removed */}
               </nav>
 
               {/* Cart Button */}
@@ -134,7 +142,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
 
           {/* Sidebar Drawer */}
           <div
-            className="absolute top-0 right-0 bottom-0 w-[280px] bg-white shadow-2xl border-l-4 border-gold-400 flex flex-col animate-in slide-in-from-right duration-300"
+            className="absolute top-0 right-0 bottom-0 w-[280px] bg-white shadow-2xl border-l-4 border-navy-900 flex flex-col animate-in slide-in-from-right duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Drawer Header */}
@@ -158,7 +166,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                   }}
                   className="flex items-center gap-3 p-3 rounded-xl text-left font-medium text-base text-navy-900 hover:bg-navy-50 hover:text-navy-900 transition-all group"
                 >
-                  <div className="p-2 rounded-lg bg-navy-50 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-gold-200 transition-all">
+                  <div className="p-2 rounded-lg bg-navy-50 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-navy-600 transition-all">
                     <span className="w-5 h-5 text-gold-500">
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                     </span>
@@ -166,10 +174,19 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                   Products
                 </button>
                 <a
+                  href="/track-order"
+                  className="flex items-center gap-3 p-3 rounded-xl text-left font-medium text-base text-navy-900 hover:bg-navy-50 hover:text-navy-900 transition-all group"
+                >
+                  <div className="p-2 rounded-lg bg-navy-50 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-navy-600 transition-all">
+                    <Truck className="w-5 h-5 text-gold-500" />
+                  </div>
+                  Track Order
+                </a>
+                <a
                   href="/calculator"
                   className="flex items-center gap-3 p-3 rounded-xl text-left font-medium text-base text-navy-900 hover:bg-navy-50 hover:text-navy-900 transition-all group"
                 >
-                  <div className="p-2 rounded-lg bg-navy-50 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-gold-200 transition-all">
+                  <div className="p-2 rounded-lg bg-navy-50 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-navy-600 transition-all">
                     <Calculator className="w-5 h-5 text-gold-500" />
                   </div>
                   Peptide Calculator
@@ -178,7 +195,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                   href="/coa"
                   className="flex items-center gap-3 p-3 rounded-xl text-left font-medium text-base text-navy-900 hover:bg-navy-50 hover:text-navy-900 transition-all group"
                 >
-                  <div className="p-2 rounded-lg bg-navy-50 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-gold-200 transition-all">
+                  <div className="p-2 rounded-lg bg-navy-50 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-navy-600 transition-all">
                     <FileText className="w-5 h-5 text-gold-500" />
                   </div>
                   Lab Tests (COA)
@@ -187,10 +204,19 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                   href="/faq"
                   className="flex items-center gap-3 p-3 rounded-xl text-left font-medium text-base text-navy-900 hover:bg-navy-50 hover:text-navy-900 transition-all group"
                 >
-                  <div className="p-2 rounded-lg bg-navy-50 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-gold-200 transition-all">
+                  <div className="p-2 rounded-lg bg-navy-50 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-navy-600 transition-all">
                     <HelpCircle className="w-5 h-5 text-gold-500" />
                   </div>
                   FAQ
+                </a>
+                <a
+                  href="/smart-guide"
+                  className="flex items-center gap-3 p-3 rounded-xl text-left font-medium text-base text-navy-900 hover:bg-navy-50 hover:text-navy-900 transition-all group"
+                >
+                  <div className="p-2 rounded-lg bg-navy-50 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-navy-600 transition-all">
+                    <BookOpen className="w-5 h-5 text-gold-500" />
+                  </div>
+                  Smart Guide
                 </a>
                 <a
                   href="https://t.me/+kdn_GOqZXxI1Y2Jl"
@@ -198,7 +224,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 p-3 rounded-xl text-left font-medium text-base text-navy-900 hover:bg-navy-50 hover:text-navy-900 transition-all group"
                 >
-                  <div className="p-2 rounded-lg bg-navy-50 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-gold-200 transition-all">
+                  <div className="p-2 rounded-lg bg-navy-50 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-navy-600 transition-all">
                     <MessageCircle className="w-5 h-5 text-gold-500" />
                   </div>
                   Join Community

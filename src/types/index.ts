@@ -74,6 +74,22 @@ export interface SiteSetting {
   updated_at: string;
 }
 
+export interface SiteSettings {
+  site_name: string;
+  site_logo: string;
+  site_description: string;
+  currency: string;
+  currency_code: string;
+  hero_badge_text?: string;
+  hero_title_prefix?: string;
+  hero_title_highlight?: string;
+  hero_title_suffix?: string;
+  hero_subtext?: string;
+  hero_tagline?: string;
+  hero_description?: string;
+  hero_accent_color?: string;
+}
+
 // Cart Types
 export interface CartItem {
   product: Product;
@@ -90,4 +106,21 @@ export interface OrderDetails {
   shipping_address: string;
   payment_method: string;
   notes?: string;
+  promo_code?: string;
+  discount_applied?: number;
+}
+
+export interface PromoCode {
+  id: string;
+  code: string;
+  discount_type: 'percentage' | 'fixed';
+  discount_value: number;
+  min_purchase_amount: number;
+  max_discount_amount?: number;
+  start_date?: string;
+  end_date?: string;
+  usage_limit?: number;
+  usage_count: number;
+  active: boolean;
+  created_at: string;
 }

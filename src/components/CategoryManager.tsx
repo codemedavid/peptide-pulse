@@ -180,7 +180,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
                   type="text"
                   value={formData.name}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-gold-500 transition-all text-sm"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-navy-900 transition-all text-sm"
                   placeholder="e.g., Research Peptides"
                 />
               </div>
@@ -193,7 +193,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
                   type="text"
                   value={formData.id}
                   onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-gold-500 transition-all text-xs sm:text-sm font-mono disabled:bg-gray-50 disabled:cursor-not-allowed disabled:text-gray-500"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-navy-900 transition-all text-xs sm:text-sm font-mono disabled:bg-gray-50 disabled:cursor-not-allowed disabled:text-gray-500"
                   placeholder="e.g., research-peptides"
                   disabled={currentView === 'edit'}
                 />
@@ -214,7 +214,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
                     type="text"
                     value={formData.icon}
                     onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                    className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-gold-500 transition-all text-sm"
+                    className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-navy-900 transition-all text-sm"
                     placeholder="Enter emoji (e.g., ☕, 🧪, 💊)"
                   />
                   <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg flex items-center justify-center text-2xl sm:text-3xl border border-gray-200 shadow-sm overflow-hidden flex-shrink-0">
@@ -234,7 +234,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
                   type="number"
                   value={formData.sort_order}
                   onChange={(e) => setFormData({ ...formData, sort_order: Number(e.target.value) })}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-gold-500 transition-all text-sm"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-navy-900 transition-all text-sm"
                   placeholder="0"
                 />
                 <p className="text-[10px] sm:text-xs text-gray-500 mt-1.5 sm:mt-2">
@@ -330,7 +330,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
               return (
                 <div
                   key={category.id}
-                  className="group bg-white border border-gray-200 rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:border-gold-300/50"
+                  className="group bg-white border border-gray-200 rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:border-navy-700/50"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
                     <div className="flex items-start gap-2 sm:gap-3 lg:gap-4 flex-1 min-w-0">

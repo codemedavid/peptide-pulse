@@ -54,7 +54,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
   const decrementQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
 
   return (
-    <div className="bg-white h-full flex flex-col group relative border-2 border-gold-400 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200">
+    <div className="bg-white h-full flex flex-col group relative border-2 border-navy-900 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200">
       {/* Click overlay for product details */}
       <div
         onClick={() => onProductClick?.(product)}
@@ -91,10 +91,10 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
         </div>
 
         {/* Stock Status Overlay */}
-        {!hasAnyStock && (
+        {(!product.available || !hasAnyStock) && (
           <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
             <span className="bg-gray-900 text-white px-3 py-1 text-xs font-semibold rounded">
-              Out of Stock
+              {!product.available ? 'Unavailable' : 'Out of Stock'}
             </span>
           </div>
         )}
@@ -168,7 +168,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                   decrementQuantity();
                 }}
                 className="p-1 sm:p-1.5 hover:bg-gray-50 transition-colors"
-                disabled={!hasAnyStock}
+                disabled={!hasAnyStock || !product.available}
               >
                 <Minus className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
               </button>
@@ -181,7 +181,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                   incrementQuantity();
                 }}
                 className="p-1 sm:p-1.5 hover:bg-gray-50 transition-colors"
-                disabled={quantity >= availableStock || !hasAnyStock}
+                disabled={quantity >= availableStock || !hasAnyStock || !product.available}
               >
                 <Plus className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
               </button>
@@ -198,7 +198,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                 }
                 handleAddToCart();
               }}
-              disabled={!hasAnyStock || availableStock === 0}
+              disabled={!hasAnyStock || availableStock === 0 || !product.available}
               className="flex-1 min-w-0 bg-navy-900 text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium hover:bg-navy-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1 sm:gap-2"
             >
               <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />

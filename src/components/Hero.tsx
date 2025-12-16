@@ -1,110 +1,118 @@
-import React from 'react';
-import { ArrowRight, ShieldCheck, Sparkles, FlaskConical, MessageCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ArrowRight, ShieldCheck, Truck, Clock } from 'lucide-react';
+import { useSiteSettings } from '../hooks/useSiteSettings';
 
-type HeroProps = {
-  onShopAll?: () => void;
-};
+interface HeroProps {
+  onShopAll: () => void;
+}
 
 const Hero: React.FC<HeroProps> = ({ onShopAll }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const { siteSettings } = useSiteSettings();
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  // Use settings or fallbacks if loading/missing
+  const badgeText = siteSettings?.hero_badge_text || 'Premium Peptide Solutions';
+  const titlePrefix = siteSettings?.hero_title_prefix || 'One-Stop Shop for';
+  const titleHighlight = siteSettings?.hero_title_highlight || 'Peptides';
+  const titleSuffix = siteSettings?.hero_title_suffix || '& Essentials';
+  const subtext = siteSettings?.hero_subtext || '— Trusted Quality for Your Journey.';
+  const tagline = siteSettings?.hero_tagline || 'Quality-tested products. Reliable performance. Trusted by our community.';
+  const description = siteSettings?.hero_description || 'SlimDose Peptides is your all-in-one destination for high-quality peptides, peptide pens, and the essential accessories you need for a smooth and confident wellness routine.';
+
   return (
-    <div className="relative overflow-hidden bg-white pt-6 pb-16 md:pt-10 md:pb-24 lg:pt-14 lg:pb-32">
-      {/* Radial Gradient Background: Blue glow in center fading to white outer */}
-      <div
-        className="absolute inset-0 pointer-events-none transform scale-125"
-        style={{
-          background: 'radial-gradient(circle at 50% 0%, rgba(0, 0, 128, 0.10) 0%, rgba(0, 0, 128, 0.03) 40%, rgba(255, 255, 255, 0) 80%)'
-        }}
-      />
+    <div className="relative bg-[#FAFAFA] overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-gray-100/50 to-transparent pointer-events-none" />
+      <div className="absolute -top-24 -right-24 w-96 h-96 bg-theme-accent/5 rounded-full blur-3xl" />
+      <div className="absolute top-1/2 -left-24 w-72 h-72 bg-blue-50 rounded-full blur-3xl" />
 
-      {/* Abstract Background Shape */}
-      <div className="absolute top-0 right-0 -mr-24 -mt-24 w-96 h-96 rounded-full bg-theme-accent/5 blur-3xl opacity-50 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 -ml-24 -mb-24 w-80 h-80 rounded-full bg-gold-400/10 blur-3xl opacity-50 pointer-events-none" />
-
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 lg:py-24 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
 
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-100 shadow-sm mb-6 md:mb-8 animate-fadeIn">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-theme-secondary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-theme-secondary"></span>
-            </span>
-            <span className="text-xs md:text-sm font-medium text-gray-600 tracking-wide">
-              Premium Peptide Solutions
-            </span>
-          </div>
+          {/* Text Content */}
+          <div className={`space-y-8 transition-all duration-1000 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
 
-          {/* Main Heading */}
-          <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold text-theme-text mb-4 md:mb-6 tracking-tight leading-tight">
-            Premium <span className="text-gold-500">Peptides</span> & Essentials
-            <br />
-            <span className="text-2xl md:text-3xl lg:text-4xl font-medium text-gray-600 block mt-2">From the Lab to You — Simplifying Science, One Dose at a Time.</span>
-          </h1>
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-200 shadow-sm mx-auto">
+              <span className="w-2 h-2 rounded-full bg-theme-accent animate-pulse" />
+              <span className="text-xs font-bold tracking-wide uppercase text-gray-600">
+                {badgeText}
+              </span>
+            </div>
 
-          {/* Tagline */}
-          <p className="text-sm md:text-base text-theme-accent font-medium mb-4 md:mb-6">
-            Quality-tested products. Reliable performance. Trusted by our community.
-          </p>
+            {/* Main Headline */}
+            <div className="space-y-2">
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-theme-text leading-[1.1] tracking-tight">
+                {titlePrefix} <span className="text-theme-secondary relative inline-block">
+                  {titleHighlight}
+                  <svg className="absolute w-full h-3 -bottom-1 left-0 text-theme-secondary/20" viewBox="0 0 100 10" preserveAspectRatio="none">
+                    <path d="M0 5 Q 50 10 100 5 L 100 0 Q 50 5 0 0 Z" fill="currentColor" />
+                  </svg>
+                </span>
+                <br className="hidden md:block" /> {titleSuffix}
+              </h1>
 
-          {/* Subheading */}
-          <p className="text-base md:text-lg text-gray-500 mb-8 md:mb-12 max-w-3xl mx-auto leading-relaxed">
-            SlimDose Peptides is your all-in-one destination for high-quality peptides, peptide pens, and the essential accessories you need for a smooth and confident wellness routine. We provide a full range of premium products to support different goals — from vitality and recovery to skin health and body wellness.
-          </p>
+              <p className="text-lg md:text-xl font-medium text-gray-500 italic max-w-2xl mx-auto">
+                {subtext}
+              </p>
+            </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 md:mb-16">
-            <button
-              className="btn-primary w-full sm:w-auto group flex items-center justify-center gap-2"
-              onClick={onShopAll}
-            >
-              Shop All Products
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <a
-              href="/coa"
-              className="px-8 py-3 rounded-lg font-medium text-theme-text hover:text-navy-900 transition-colors flex items-center gap-2 w-full sm:w-auto justify-center"
-            >
-              View Lab Tests & Quality Assurance
-              <ShieldCheck className="w-4 h-4" />
-            </a>
-          </div>
-
-          {/* Trust Indicators - Horizontal scrollable on mobile */}
-          <div className="flex flex-row items-stretch gap-4 md:gap-8 border-t border-gray-100 pt-8 md:pt-12 max-w-3xl mx-auto overflow-x-auto pb-2 scrollbar-hide">
-            <div className="flex flex-col items-center gap-2 group min-w-[100px] flex-1">
-              <div className="p-2 md:p-3 bg-white rounded-xl shadow-sm border border-gray-100 group-hover:border-theme-accent/30 transition-colors">
-                <ShieldCheck className="w-5 h-5 md:w-6 md:h-6 text-theme-accent" />
+            {/* Sub-headline/Tagline */}
+            <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-soft border border-gray-100 max-w-xl mx-auto text-left">
+              <div className="p-2 bg-theme-accent/10 rounded-lg shrink-0">
+                <ShieldCheck className="w-6 h-6 text-theme-accent" />
               </div>
-              <p className="font-semibold text-theme-text text-xs md:text-sm text-center">Lab Verified</p>
-              <p className="text-[10px] md:text-xs text-gray-400 text-center">Purity Guaranteed</p>
-            </div>
-            <div className="flex flex-col items-center gap-2 group min-w-[100px] flex-1">
-              <div className="p-2 md:p-3 bg-white rounded-xl shadow-sm border border-gray-100 group-hover:border-theme-secondary/30 transition-colors">
-                <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-theme-secondary" />
+              <div>
+                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-1">
+                  Verified Excellence
+                </h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {tagline}
+                </p>
               </div>
-              <p className="font-semibold text-theme-text text-xs md:text-sm text-center">Premium Quality</p>
-              <p className="text-[10px] md:text-xs text-gray-400 text-center">Sourced for Excellence</p>
             </div>
-            <div className="flex flex-col items-center gap-2 group min-w-[100px] flex-1">
-              <div className="p-2 md:p-3 bg-white rounded-xl shadow-sm border border-gray-100 group-hover:border-theme-accent/30 transition-colors">
-                <FlaskConical className="w-5 h-5 md:w-6 md:h-6 text-theme-accent" />
-              </div>
-              <p className="font-semibold text-theme-text text-xs md:text-sm text-center">Real-World Tested</p>
-              <p className="text-[10px] md:text-xs text-gray-400 text-center">Verified by Our Team</p>
-            </div>
-          </div>
 
-          {/* Real-World Tested Section */}
-          <div className="mt-12 md:mt-16 bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm max-w-2xl mx-auto">
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <FlaskConical className="w-5 h-5 text-gold-500" />
-              <h3 className="font-bold text-theme-text">Real-World Tested</h3>
-            </div>
-            <p className="text-sm md:text-base text-gray-600 leading-relaxed">
-              Every peptide and supply item is used and verified by our team and community before being offered in our shop. Quality you can feel — results you can trust.
+            {/* Main Description */}
+            <p className="text-base text-gray-600 leading-relaxed max-w-2xl mx-auto">
+              {description}
             </p>
-          </div>
 
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 pt-2 justify-center">
+              <button
+                onClick={onShopAll}
+                className="group relative px-8 py-4 bg-navy-900 text-white rounded-xl font-bold shadow-lg shadow-navy-900/20 hover:shadow-xl hover:shadow-navy-900/30 hover:-translate-y-0.5 transition-all overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                <span className="relative flex items-center justify-center gap-2">
+                  Shop All Products
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </button>
+
+
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="flex flex-wrap justify-center items-center gap-6 pt-6 border-t border-gray-100">
+              <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
+                <Truck className="w-4 h-4 text-green-500" />
+                <span>Fast Shipping</span>
+              </div>
+              <div className="hidden sm:flex text-sm font-medium text-gray-500">
+                <span className="w-1 h-4 bg-gray-200 mx-4 rounded-full" />
+              </div>
+              <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
+                <Clock className="w-4 h-4 text-blue-500" />
+                <span>24/7 Support</span>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
@@ -112,4 +120,3 @@ const Hero: React.FC<HeroProps> = ({ onShopAll }) => {
 };
 
 export default Hero;
-

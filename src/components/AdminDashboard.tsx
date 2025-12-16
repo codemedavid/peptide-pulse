@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Save, X, ArrowLeft, TrendingUp, Package, Users, FolderOpen, CreditCard, Sparkles, Layers, Shield, RefreshCw, Warehouse, ShoppingCart, HelpCircle, MapPin } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, ArrowLeft, TrendingUp, Package, Users, FolderOpen, CreditCard, Sparkles, Layers, Shield, RefreshCw, Warehouse, ShoppingCart, HelpCircle, MapPin, Settings, Tag, BookOpen } from 'lucide-react';
 import type { Product } from '../types';
 import { useMenu } from '../hooks/useMenu';
 import { useCategories } from '../hooks/useCategories';
@@ -12,6 +12,9 @@ import PeptideInventoryManager from './PeptideInventoryManager';
 import OrdersManager from './OrdersManager';
 import FAQManager from './FAQManager';
 import ShippingManager from './ShippingManager';
+import SiteSettingsManager from './SiteSettingsManager';
+import PromoCodeManager from './PromoCodeManager';
+import GuideManager from './GuideManager';
 
 const AdminDashboard: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -21,7 +24,7 @@ const AdminDashboard: React.FC = () => {
   const [loginError, setLoginError] = useState('');
   const { products, loading, addProduct, updateProduct, deleteProduct, refreshProducts } = useMenu();
   const { categories } = useCategories();
-  const [currentView, setCurrentView] = useState<'dashboard' | 'products' | 'add' | 'edit' | 'categories' | 'payments' | 'inventory' | 'orders' | 'shipping' | 'coa' | 'faq'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'products' | 'add' | 'edit' | 'categories' | 'payments' | 'inventory' | 'orders' | 'shipping' | 'coa' | 'faq' | 'settings' | 'promo-codes' | 'guides'>('dashboard');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [managingVariationsProductId, setManagingVariationsProductId] = useState<string | null>(null);
@@ -142,6 +145,7 @@ const AdminDashboard: React.FC = () => {
       }
     }
   };
+
 
   const toggleSelectProduct = (productId: string) => {
     const newSelected = new Set(selectedProducts);
@@ -365,7 +369,7 @@ const AdminDashboard: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-theme-bg flex items-center justify-center px-4">
-        <div className="bg-white rounded-xl shadow-soft p-6 md:p-8 w-full max-w-md border border-gold-500/20">
+        <div className="bg-white rounded-xl shadow-soft p-6 md:p-8 w-full max-w-md border border-navy-900/20">
           <div className="text-center mb-6">
             <div className="relative mx-auto w-16 h-16 rounded-full overflow-hidden mb-4 border-2 border-theme-accent/30">
               <img
@@ -387,7 +391,7 @@ const AdminDashboard: React.FC = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gold-500/20 rounded-lg focus:ring-2 focus:ring-theme-accent focus:border-theme-accent transition-colors"
+                className="w-full px-4 py-3 border border-navy-900/20 rounded-lg focus:ring-2 focus:ring-theme-accent focus:border-theme-accent transition-colors"
                 placeholder="Enter admin password"
                 required
               />
@@ -411,7 +415,7 @@ const AdminDashboard: React.FC = () => {
     return (
       <div className="min-h-screen bg-theme-bg flex items-center justify-center px-4">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-gold-500/20 border-t-theme-accent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-12 h-12 border-4 border-navy-900/20 border-t-theme-accent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-sm text-gray-600 font-medium">Loading...</p>
         </div>
       </div>
@@ -780,7 +784,7 @@ const AdminDashboard: React.FC = () => {
                   <button
                     onClick={handleRefresh}
                     disabled={isRefreshing}
-                    className="bg-navy-900 hover:bg-navy-800 text-white px-2 py-1 rounded-md font-medium text-xs shadow-sm hover:shadow transition-all flex items-center gap-1 disabled:opacity-50 border border-gold-500/20"
+                    className="bg-navy-900 hover:bg-navy-800 text-white px-2 py-1 rounded-md font-medium text-xs shadow-sm hover:shadow transition-all flex items-center gap-1 disabled:opacity-50 border border-navy-900/20"
                     title="Refresh data"
                   >
                     <RefreshCw className={`h-3 w-3 ${isRefreshing ? 'animate-spin' : ''}`} />
@@ -854,10 +858,10 @@ const AdminDashboard: React.FC = () => {
                           setManagingVariationsProductId(product.id);
                         }}
                         disabled={isProcessing}
-                        className={`p-1.5 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed ${product.variations && product.variations.length > 0
+                        className={`p - 1.5 rounded - lg transition - all disabled: opacity - 50 disabled: cursor - not - allowed ${product.variations && product.variations.length > 0
                           ? 'bg-gold-500 text-black hover:bg-gold-600 shadow-md cursor-pointer'
                           : 'text-theme-accent hover:bg-gray-100 cursor-pointer'
-                          }`}
+                          } `}
                         title="Manage Sizes - Click to edit prices!"
                       >
                         <Layers className="h-4 w-4" />
@@ -1008,7 +1012,7 @@ const AdminDashboard: React.FC = () => {
                               className={`p-1.5 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed ${product.variations && product.variations.length > 0
                                 ? 'bg-gold-500 text-black hover:bg-gold-600 shadow-md hover:shadow-lg cursor-pointer'
                                 : 'text-theme-accent hover:bg-gray-100 cursor-pointer'
-                                }`}
+                                } `}
                               title="Manage Sizes - Click here to edit prices!"
                             >
                               <Layers className="h-3.5 w-3.5" />
@@ -1077,16 +1081,74 @@ const AdminDashboard: React.FC = () => {
     return <FAQManager onBack={() => setCurrentView('dashboard')} />;
   }
 
+  // Promo Codes View
+  if (currentView === 'promo-codes') {
+    return (
+      <div className="min-h-screen bg-gray-50 p-4">
+        <div className="max-w-4xl mx-auto">
+          <button
+            onClick={() => setCurrentView('dashboard')}
+            className="mb-4 text-gray-600 hover:text-navy-900 flex items-center gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Dashboard
+          </button>
+          <PromoCodeManager />
+        </div>
+      </div>
+    );
+  }
+
+  // Smart Guides View
+  if (currentView === 'guides') {
+    return <GuideManager />;
+  }
+
+  // Settings View
+  if (currentView === 'settings') {
+    // SiteSettingsManager doesn't seem to have onBack prop based on earlier view_file, 
+    // checking its content... it has handleCancel but assumes rendered in place or manages its own state.
+    // Looking at SiteSettingsManager.tsx line 251, it doesn't take props?
+    // Wait, SiteSettingsManager.tsx as viewed in step 181 has no props defined in React.FC.
+    // However, it has a back button logic internally? No, it has "Site Settings" header and Edit/Cancel buttons.
+    // I should probably wrap it or modify it to support onBack if I want consistent UI.
+    // For now I will wrap it in the standard layout style if needed, or just render it.
+    // Given the dashboard structure, other managers take onBack. 
+    // Let's assume for now I just render it, but I might need to make it comply with the layout.
+    // Actually, looking at other managers they render full screen or modify view.
+    // I'll render it and if it lacks a back button to dashboard, the user is stuck.
+    // SiteSettingsManager from step 181 DOES NOT have a back button to main dashboard.
+    // It has a "Cancel" button that exits edit mode.
+    // I should wrap it or modify it. 
+    // To match the requested speed, I'll modify AdminDashboard to render it with a manual Back button if needed, 
+    // OR simply assume I'll fix SiteSettingsManager later.
+    // BETTER: Render it inside the dashboard layout or add a wrapper here.
+    return (
+      <div className="min-h-screen bg-gray-50 p-4">
+        <div className="max-w-4xl mx-auto">
+          <button
+            onClick={() => setCurrentView('dashboard')}
+            className="mb-4 text-gray-600 hover:text-navy-900 flex items-center gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Dashboard
+          </button>
+          <SiteSettingsManager />
+        </div>
+      </div>
+    );
+  }
+
   // Dashboard View
   return (
     <>
       {variationManagerModal}
       <div className="min-h-screen bg-gray-50">
-        <div className="bg-white shadow-md border-b-4 border-gold-400">
+        <div className="bg-white shadow-md border-b-4 border-navy-900">
           <div className="max-w-6xl mx-auto px-4">
             <div className="flex items-center justify-between h-14">
               <div className="flex items-center space-x-3">
-                <div className="w-9 h-9 rounded-full overflow-hidden border border-gold-500/20">
+                <div className="w-9 h-9 rounded-full overflow-hidden border border-navy-900/20">
                   <img
                     src="/assets/logo.jpeg"
                     alt="SlimDose Peptides"
@@ -1273,6 +1335,33 @@ const AdminDashboard: React.FC = () => {
                     <HelpCircle className="h-4 w-4 text-navy-900" />
                   </div>
                   <span className="text-sm font-medium text-navy-900">Manage FAQ</span>
+                </button>
+                <button
+                  onClick={() => setCurrentView('promo-codes')}
+                  className="w-full flex items-center gap-3 p-2 text-left hover:bg-gray-50 rounded-lg transition-all"
+                >
+                  <div className="p-1.5 bg-green-50 rounded-lg">
+                    <Tag className="h-4 w-4 text-green-700" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">Promo Codes</span>
+                </button>
+                <button
+                  onClick={() => setCurrentView('guides')}
+                  className="w-full flex items-center gap-3 p-2 text-left hover:bg-gray-50 rounded-lg transition-all"
+                >
+                  <div className="p-1.5 bg-purple-50 rounded-lg">
+                    <BookOpen className="h-4 w-4 text-purple-600" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">Smart Guides</span>
+                </button>
+                <button
+                  onClick={() => setCurrentView('settings')}
+                  className="w-full flex items-center gap-3 p-2 text-left hover:bg-gray-50 rounded-lg transition-all"
+                >
+                  <div className="p-1.5 bg-gray-100 rounded-lg">
+                    <Settings className="h-4 w-4 text-gray-700" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">Site Settings</span>
                 </button>
               </div>
             </div>
