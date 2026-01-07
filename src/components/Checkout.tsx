@@ -284,7 +284,7 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
       });
 
       const orderDetails = `
-✨Peptide Pulse - NEW ORDER
+✨Biorhythm - NEW ORDER
 
 📅 ORDER DATE & TIME
 ${dateTimeStamp}
@@ -1000,7 +1000,7 @@ Please confirm this order. Thank you!
                     <MessageCircle className="w-6 h-6 text-gold-600" />
                     <div className="text-left">
                       <p className="font-semibold text-navy-900">Messenger</p>
-                      <p className="text-sm text-gray-500">Peptide Pulse</p>
+                      <p className="text-sm text-gray-500">Biorhythm</p>
                     </div>
                   </div>
                   {contactMethod === 'messenger' && (

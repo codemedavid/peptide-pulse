@@ -1,19 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* Magenta-led Peptide Pulse Brand Theme */
+  /* Green & Gold Premium Brand Theme */
   --theme-bg: #FFFFFF;
   --theme-text: #111111;
-  --theme-accent: #E91E63;
-  --theme-accent-hover: #FF4F9A;
+  --theme-accent: #0D5C4B;
+  --theme-accent-hover: #0A7B5E;
   --theme-secondary: #F4F4F6;
   --text-secondary: #4A4A4A;
 
-  --primary-magenta: #E91E63;
+  --primary-green: #0D5C4B;
+  --primary-gold: #D4AF37;
   --primary-white: #ffffff;
 
   --gray-50: #FFFFFF;
@@ -31,7 +32,7 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--theme-bg);

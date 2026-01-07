@@ -7,77 +7,91 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Magenta-led SlimDose Brand Theme
+        // Green & Gold Premium Brand Theme
         'theme-bg': '#FFFFFF',        // Pure white background
         'theme-text': '#111111',      // Charcoal black (headings)
-        'theme-accent': '#E91E63',    // Primary Magenta (hero color)
-        'theme-accent-hover': '#FF4F9A', // Neon pink for hover
+        'theme-accent': '#0D5C4B',    // Primary Emerald Green (hero color)
+        'theme-accent-hover': '#0A7B5E', // Lighter green for hover
         'theme-secondary': '#F4F4F6', // Soft gray (UI backgrounds)
         'text-secondary': '#4A4A4A',  // Cool dark gray (body text)
 
-        // Magenta scale (primary brand color)
+        // Emerald Green scale (primary brand color)
         magenta: {
-          50: '#FCE4EC',
-          100: '#F8BBD9',
-          200: '#F48FB1',
-          300: '#F06292',
-          400: '#EC407A',
-          500: '#E91E63', // Primary magenta
-          600: '#D81B60',
-          700: '#C2185B',
-          800: '#AD1457',
-          900: '#880E4F',
+          50: '#E8F5F0',
+          100: '#C8E6D9',
+          200: '#A5D6C0',
+          300: '#82C6A7',
+          400: '#5EB68E',
+          500: '#0D5C4B', // Primary emerald green
+          600: '#0B5043',
+          700: '#09443A',
+          800: '#073832',
+          900: '#052C29',
         },
-        // Primary scale mapped to magenta for compatibility
+        // Primary scale mapped to emerald for compatibility
         primary: {
-          50: '#FCE4EC',
-          100: '#F8BBD9',
-          200: '#F48FB1',
-          300: '#F06292',
-          400: '#EC407A',
-          500: '#E91E63',
-          600: '#D81B60',
-          700: '#C2185B',
-          800: '#AD1457',
-          900: '#880E4F',
+          50: '#E8F5F0',
+          100: '#C8E6D9',
+          200: '#A5D6C0',
+          300: '#82C6A7',
+          400: '#5EB68E',
+          500: '#0D5C4B',
+          600: '#0B5043',
+          700: '#09443A',
+          800: '#073832',
+          900: '#052C29',
         },
-        // Accent colors
+        // Gold accent colors
         accent: {
-          light: '#FF4F9A',   // Neon pink
-          DEFAULT: '#E91E63', // Magenta
-          dark: '#C2185B',
+          light: '#F5D77A',   // Light gold
+          DEFAULT: '#D4AF37', // Classic gold
+          dark: '#B8962E',
           white: '#FFFFFF',
           black: '#111111',
         },
-        // Teal for biotech credibility (optional contrast)
-        teal: {
-          50: '#E0F7F5',
-          100: '#B2EBE5',
-          200: '#80DED3',
-          300: '#4DD0C1',
-          400: '#26C6B3',
-          500: '#00B3A4', // Main teal
-          600: '#00A396',
-          700: '#009085',
-          800: '#007D73',
-          900: '#005C55',
+        // Gold scale for the secondary accent
+        gold: {
+          50: '#FDF8E8',
+          100: '#FAEFCA',
+          200: '#F5E3A0',
+          300: '#F0D776',
+          400: '#E8C84C',
+          500: '#D4AF37', // Main gold
+          600: '#B8962E',
+          700: '#9A7D26',
+          800: '#7C641E',
+          900: '#5E4B16',
         },
-        // Navy kept for backward compatibility, mapped to magenta tones
+        // Teal updated to match green theme
+        teal: {
+          50: '#E8F5F0',
+          100: '#C8E6D9',
+          200: '#A5D6C0',
+          300: '#82C6A7',
+          400: '#5EB68E',
+          500: '#0D5C4B', // Same as primary
+          600: '#0B5043',
+          700: '#09443A',
+          800: '#073832',
+          900: '#052C29',
+        },
+        // Navy kept for backward compatibility, mapped to green tones
         navy: {
-          50: '#FCE4EC',
-          100: '#F8BBD9',
-          200: '#F48FB1',
-          300: '#F06292',
-          400: '#EC407A',
-          500: '#E91E63',
-          600: '#D81B60',
-          700: '#C2185B',
-          800: '#AD1457',
-          900: '#880E4F',
+          50: '#E8F5F0',
+          100: '#C8E6D9',
+          200: '#A5D6C0',
+          300: '#82C6A7',
+          400: '#5EB68E',
+          500: '#0D5C4B',
+          600: '#0B5043',
+          700: '#09443A',
+          800: '#073832',
+          900: '#052C29',
         },
       },
       fontFamily: {
-        inter: ['Inter', 'sans-serif'],
+        inter: ['Cormorant Garamond', 'Georgia', 'serif'],
+        garamond: ['Cormorant Garamond', 'Georgia', 'serif'],
       },
       boxShadow: {
         'soft': '0 2px 10px rgba(0, 0, 0, 0.03)',

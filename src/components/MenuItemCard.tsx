@@ -72,7 +72,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
       />
 
       {/* Product Image */}
-      <div className="relative h-48 bg-gray-50 overflow-hidden rounded-t-xl">
+      <div className="relative h-48 bg-gradient-to-br from-magenta-100 to-magenta-50 overflow-hidden rounded-t-xl">
         {product.image_url ? (
           <img
             src={product.image_url}
@@ -80,8 +80,10 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-300">
-            <Package className="w-12 h-12" />
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-magenta-100 via-magenta-50 to-gold-50">
+            <div className="p-4 rounded-full bg-white/60 backdrop-blur-sm shadow-sm">
+              <Package className="w-12 h-12 text-magenta-500" />
+            </div>
           </div>
         )}
 
